@@ -1,5 +1,5 @@
 use clap::{command, Arg, ArgAction};
-use segments::{cwd::CwdSegment, root::RootSegment, Segment};
+use segments::{cwd::CwdSegment, kube::KubeSegment, root::RootSegment, Segment};
 use theme::Theme;
 
 mod segments;
@@ -92,6 +92,12 @@ fn main() {
                 .long("segment-root")
                 .action(ArgAction::Count),
         )
+        .arg(
+            Arg::new("segment-kube")
+                .long("segment-kube")
+                .required(false)
+                .action(ArgAction::Count),
+        )
         .get_matches();
 
     let shell = match matches.get_one("shell").map(String::as_str) {
@@ -115,6 +121,10 @@ fn main() {
             _ => unreachable!(),
         };
         powerline.add_segment(CwdSegment::new(dironly));
+    }
+
+    if matches.get_count("segment-kube") > 0 {
+        powerline.add_segment(KubeSegment::new());
     }
 
     if matches.get_count("segment-root") > 0 {
