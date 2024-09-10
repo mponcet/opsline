@@ -38,7 +38,7 @@ impl Powerline {
         let segments: Vec<_> = self
             .segments
             .iter()
-            .map(|segment| segment.output(self.shell, &self.theme))
+            .filter_map(|segment| segment.output(self.shell, &self.theme))
             .collect();
 
         for (i, output) in segments.iter().enumerate() {

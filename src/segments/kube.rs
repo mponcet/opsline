@@ -15,30 +15,22 @@ impl KubeSegment {
 }
 
 impl Segment for KubeSegment {
-    fn output(&self, _shell: Shell, theme: &Theme) -> SegmentOutput {
-        let current_context = match Kubeconfig::read() {
-            Ok(config) => {
-                if let Some(current_context) = config.current_context {
-                    if config.contexts.iter().any(|c| c.name == current_context) {
-                        current_context
-                    } else {
-                        "".into()
-                    }
-                } else {
-                    "".into()
-                }
-            }
-            Err(_) => "".into(),
-        };
+    fn output(&self, _shell: Shell, theme: &Theme) -> Option<SegmentOutput> {
+        let config = Kubeconfig::read().ok()?;
+        let current_context = config.current_context?;
+
+        if config.contexts.iter().all(|c| c.name != current_context) {
+            return None;
+        }
 
         let (fg, bg) = match theme {
             Theme::Default => (ForegroundColor(117), BackgroundColor(26)),
         };
 
-        SegmentOutput {
+        Some(SegmentOutput {
             text: current_context,
             fg,
             bg,
-        }
+        })
     }
 }

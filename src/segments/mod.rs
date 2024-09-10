@@ -15,5 +15,5 @@ pub struct SegmentOutput {
 }
 
 pub trait Segment {
-    fn output(&self, shell: Shell, theme: &Theme) -> SegmentOutput;
+    fn output(&self, shell: Shell, theme: &Theme) -> Option<SegmentOutput>;
 }

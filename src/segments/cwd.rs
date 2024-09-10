@@ -22,7 +22,7 @@ impl CwdSegment {
 }
 
 impl Segment for CwdSegment {
-    fn output(&self, shell: Shell, theme: &Theme) -> SegmentOutput {
+    fn output(&self, shell: Shell, theme: &Theme) -> Option<SegmentOutput> {
         let cwd = std::env::current_dir().unwrap_or_default();
 
         let text = if self.dironly {
@@ -57,6 +57,6 @@ impl Segment for CwdSegment {
             Theme::Default => (BackgroundColor(241), ForegroundColor(250)),
         };
 
-        SegmentOutput { text, bg, fg }
+        Some(SegmentOutput { text, bg, fg })
     }
 }

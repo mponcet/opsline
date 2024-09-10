@@ -13,7 +13,7 @@ impl RootSegment {
 }
 
 impl Segment for RootSegment {
-    fn output(&self, shell: Shell, theme: &Theme) -> SegmentOutput {
+    fn output(&self, shell: Shell, theme: &Theme) -> Option<SegmentOutput> {
         let text = match shell {
             Shell::Bash => r"\$".into(),
             Shell::Zsh => todo!(),
@@ -27,6 +27,6 @@ impl Segment for RootSegment {
             Theme::Default => (BackgroundColor(130), ForegroundColor(255)),
         };
 
-        SegmentOutput { text, bg, fg }
+        Some(SegmentOutput { text, bg, fg })
     }
 }
