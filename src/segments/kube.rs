@@ -26,18 +26,28 @@ impl SegmentGenerator for KubeSegment {
         let (fg, bg) = match theme {
             Theme::Default => (ForegroundColor(117), BackgroundColor(26)),
         };
-
-        let text = if let Some(namespace) = context.namespace {
-            format!(
-                "{} {} | {}",
-                fonts::NerdFonts::SHIP_WHEEL,
-                current_context,
-                namespace
-            )
-        } else {
-            format!("{} {}", fonts::NerdFonts::SHIP_WHEEL, current_context)
+        let segment_context = Segment {
+            text: format!("{} {}", fonts::NerdFonts::SHIP_WHEEL, current_context),
+            fg,
+            bg,
         };
 
-        Some(Segments::One(Segment { text, fg, bg }))
+        if let Some(namespace) = context.namespace {
+            let (fg, bg) = match theme {
+                Theme::Default => (ForegroundColor(170), BackgroundColor(17)),
+            };
+            let segment_namespace = Segment {
+                text: namespace,
+                fg,
+                bg,
+            };
+
+            Some(Segments::Many(Vec::from([
+                segment_context,
+                segment_namespace,
+            ])))
+        } else {
+            Some(Segments::One(segment_context))
+        }
     }
 }
