@@ -1,5 +1,7 @@
 use clap::{command, Arg, ArgAction};
-use segments::{cwd::CwdSegment, kube::KubeSegment, root::RootSegment, Segment};
+use segments::{
+    cwd::CwdSegment, kube::KubeSegment, root::RootSegment, Segment, SegmentGenerator, Segments,
+};
 use theme::Theme;
 
 mod fonts;
@@ -9,7 +11,7 @@ mod theme;
 struct Powerline {
     shell: Shell,
     theme: Theme,
-    segments: Vec<Box<dyn Segment + 'static>>,
+    segments: Vec<Box<dyn SegmentGenerator + 'static>>,
 }
 
 #[derive(Clone, Copy)]
@@ -28,7 +30,7 @@ impl Powerline {
         }
     }
 
-    fn add_segment(&mut self, segment: impl Segment + 'static) {
+    fn add_segment(&mut self, segment: impl SegmentGenerator + 'static) {
         self.segments.push(Box::new(segment));
     }
 
@@ -38,7 +40,13 @@ impl Powerline {
         let segments: Vec<_> = self
             .segments
             .iter()
-            .filter_map(|segment| segment.output(self.shell, &self.theme))
+            .filter_map(|s| s.output(self.shell, &self.theme))
+            .flat_map(|s| match s {
+                Segments::One(o) => {
+                    Box::new(std::iter::once(o)) as Box<dyn Iterator<Item = Segment>>
+                }
+                Segments::Many(m) => Box::new(m.into_iter()) as Box<dyn Iterator<Item = Segment>>,
+            })
             .collect();
 
         for (i, output) in segments.iter().enumerate() {

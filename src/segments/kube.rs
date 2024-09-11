@@ -1,11 +1,9 @@
 use kube::config::Kubeconfig;
 
-use crate::{
-    fonts,
-    segments::SegmentOutput,
-    theme::{BackgroundColor, ForegroundColor, Theme},
-    Segment, Shell,
-};
+use crate::fonts;
+use crate::segments::{Segment, SegmentGenerator, Segments};
+use crate::theme::{BackgroundColor, ForegroundColor, Theme};
+use crate::Shell;
 
 pub struct KubeSegment;
 
@@ -15,8 +13,8 @@ impl KubeSegment {
     }
 }
 
-impl Segment for KubeSegment {
-    fn output(&self, _shell: Shell, theme: &Theme) -> Option<SegmentOutput> {
+impl SegmentGenerator for KubeSegment {
+    fn output(&self, _shell: Shell, theme: &Theme) -> Option<Segments> {
         let config = Kubeconfig::read().ok()?;
         let current_context = config.current_context?;
         let context = config
@@ -40,6 +38,6 @@ impl Segment for KubeSegment {
             format!("{} {}", fonts::NerdFonts::SHIP_WHEEL, current_context)
         };
 
-        Some(SegmentOutput { text, fg, bg })
+        Some(Segments::One(Segment { text, fg, bg }))
     }
 }

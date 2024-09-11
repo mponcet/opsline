@@ -1,9 +1,7 @@
-use crate::{
-    theme::{BackgroundColor, ForegroundColor},
-    Shell, Theme,
-};
-
-use super::{Segment, SegmentOutput};
+use crate::segments::{Segment, SegmentGenerator, Segments};
+use crate::theme::{BackgroundColor, ForegroundColor};
+use crate::Shell;
+use crate::Theme;
 
 pub struct CwdSegment {
     dironly: bool,
@@ -21,8 +19,8 @@ impl CwdSegment {
     }
 }
 
-impl Segment for CwdSegment {
-    fn output(&self, shell: Shell, theme: &Theme) -> Option<SegmentOutput> {
+impl SegmentGenerator for CwdSegment {
+    fn output(&self, shell: Shell, theme: &Theme) -> Option<Segments> {
         let cwd = std::env::current_dir().unwrap_or_default();
 
         let text = if self.dironly {
@@ -57,6 +55,6 @@ impl Segment for CwdSegment {
             Theme::Default => (BackgroundColor(241), ForegroundColor(250)),
         };
 
-        Some(SegmentOutput { text, bg, fg })
+        Some(Segments::One(Segment { text, bg, fg }))
     }
 }
