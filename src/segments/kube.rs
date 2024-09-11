@@ -1,6 +1,7 @@
 use kube::config::Kubeconfig;
 
 use crate::{
+    fonts,
     segments::SegmentOutput,
     theme::{BackgroundColor, ForegroundColor, Theme},
     Segment, Shell,
@@ -28,7 +29,7 @@ impl Segment for KubeSegment {
         };
 
         Some(SegmentOutput {
-            text: current_context,
+            text: format!("{} {}", fonts::NerdFonts::SHIP_WHEEL, current_context),
             fg,
             bg,
         })
