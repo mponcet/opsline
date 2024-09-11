@@ -19,19 +19,27 @@ impl Segment for KubeSegment {
     fn output(&self, _shell: Shell, theme: &Theme) -> Option<SegmentOutput> {
         let config = Kubeconfig::read().ok()?;
         let current_context = config.current_context?;
-
-        if config.contexts.iter().all(|c| c.name != current_context) {
-            return None;
-        }
+        let context = config
+            .contexts
+            .iter()
+            .find(|c| c.name == current_context)
+            .map(|c| c.context.clone())??;
 
         let (fg, bg) = match theme {
             Theme::Default => (ForegroundColor(117), BackgroundColor(26)),
         };
 
-        Some(SegmentOutput {
-            text: format!("{} {}", fonts::NerdFonts::SHIP_WHEEL, current_context),
-            fg,
-            bg,
-        })
+        let text = if let Some(namespace) = context.namespace {
+            format!(
+                "{} {} | {}",
+                fonts::NerdFonts::SHIP_WHEEL,
+                current_context,
+                namespace
+            )
+        } else {
+            format!("{} {}", fonts::NerdFonts::SHIP_WHEEL, current_context)
+        };
+
+        Some(SegmentOutput { text, fg, bg })
     }
 }
