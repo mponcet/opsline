@@ -1,4 +1,4 @@
-use crate::segments::{Segment, SegmentGenerator, Segments};
+use crate::segments::{Segment, SegmentGenerator};
 use crate::theme::{BackgroundColor, ForegroundColor};
 use crate::Shell;
 use crate::Theme;
@@ -20,7 +20,7 @@ impl CwdSegment {
 }
 
 impl SegmentGenerator for CwdSegment {
-    fn output(&self, shell: Shell, theme: &Theme) -> Option<Segments> {
+    fn output(&self, shell: Shell, theme: &Theme) -> Option<Vec<Segment>> {
         let cwd = std::env::current_dir().unwrap_or_default();
 
         let text = if self.dironly {
@@ -55,11 +55,11 @@ impl SegmentGenerator for CwdSegment {
             Theme::Default => (BackgroundColor(241), ForegroundColor(250)),
         };
 
-        Some(Segments::One(Segment {
+        Some(Vec::from([Segment {
             text,
             bg,
             fg,
             blinking: false,
-        }))
+        }]))
     }
 }

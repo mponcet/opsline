@@ -1,7 +1,7 @@
 use crate::theme::{BackgroundColor, ForegroundColor};
 use crate::Shell;
 use crate::Theme;
-use crate::{segments::Segment, SegmentGenerator, Segments};
+use crate::{segments::Segment, SegmentGenerator};
 
 pub struct RootSegment;
 
@@ -12,7 +12,7 @@ impl RootSegment {
 }
 
 impl SegmentGenerator for RootSegment {
-    fn output(&self, shell: Shell, theme: &Theme) -> Option<Segments> {
+    fn output(&self, shell: Shell, theme: &Theme) -> Option<Vec<Segment>> {
         let text = match shell {
             Shell::Bash => r" \$ ".into(),
             Shell::Zsh => todo!(),
@@ -26,11 +26,11 @@ impl SegmentGenerator for RootSegment {
             Theme::Default => (BackgroundColor(130), ForegroundColor(255)),
         };
 
-        Some(Segments::One(Segment {
+        Some(Vec::from([Segment {
             text,
             bg,
             fg,
             blinking: false,
-        }))
+        }]))
     }
 }

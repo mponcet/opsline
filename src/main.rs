@@ -1,7 +1,5 @@
 use clap::{command, Arg, ArgAction};
-use segments::{
-    cwd::CwdSegment, kube::KubeSegment, root::RootSegment, Segment, SegmentGenerator, Segments,
-};
+use segments::{cwd::CwdSegment, kube::KubeSegment, root::RootSegment, SegmentGenerator};
 use theme::Theme;
 
 mod fonts;
@@ -41,12 +39,7 @@ impl Powerline {
             .segments
             .iter()
             .filter_map(|s| s.output(self.shell, &self.theme))
-            .flat_map(|s| match s {
-                Segments::One(o) => {
-                    Box::new(std::iter::once(o)) as Box<dyn Iterator<Item = Segment>>
-                }
-                Segments::Many(m) => Box::new(m.into_iter()) as Box<dyn Iterator<Item = Segment>>,
-            })
+            .flatten()
             .collect();
 
         for (i, output) in segments.iter().enumerate() {

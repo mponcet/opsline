@@ -15,11 +15,6 @@ pub struct Segment {
     pub blinking: bool,
 }
 
-pub enum Segments {
-    One(Segment),
-    Many(Vec<Segment>),
-}
-
 pub trait SegmentGenerator {
-    fn output(&self, shell: Shell, theme: &Theme) -> Option<Segments>;
+    fn output(&self, shell: Shell, theme: &Theme) -> Option<Vec<Segment>>;
 }
