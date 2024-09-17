@@ -14,11 +14,11 @@ impl RootSegment {
 impl SegmentGenerator for RootSegment {
     fn output(&self, shell: Shell, theme: &Theme) -> Option<Segments> {
         let text = match shell {
-            Shell::Bash => r"\$".into(),
+            Shell::Bash => r" \$ ".into(),
             Shell::Zsh => todo!(),
             Shell::Bare => match unsafe { libc::getuid() } {
-                0 => "#".into(),
-                _ => "$".into(),
+                0 => " # ".into(),
+                _ => " $ ".into(),
             },
         };
 

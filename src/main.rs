@@ -53,7 +53,7 @@ impl Powerline {
             // 38;5 => foreground color
             // 48;5 => background color
             let segment_ps1 = format!(
-                r"\[\e[38;5;{}m\]\[\e[48;5;{}m\]{} {} \[\e[0m\]",
+                r"\[\e[38;5;{}m\]\[\e[48;5;{}m\]{}{}\[\e[0m\]",
                 output.fg,
                 output.bg,
                 if output.blinking { r"\[\e[5m\]" } else { "" },

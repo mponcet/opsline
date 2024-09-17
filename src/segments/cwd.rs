@@ -25,7 +25,7 @@ impl SegmentGenerator for CwdSegment {
 
         let text = if self.dironly {
             match shell {
-                Shell::Bash => r"\W".into(),
+                Shell::Bash => r" \W ".into(),
                 Shell::Zsh => todo!(),
                 Shell::Bare => cwd
                     .file_name()
@@ -35,7 +35,7 @@ impl SegmentGenerator for CwdSegment {
             }
         } else {
             match shell {
-                Shell::Bash => r"\w".into(),
+                Shell::Bash => r" \w ".into(),
                 Shell::Zsh => todo!(),
                 Shell::Bare => {
                     let Ok(Some(home)) = homedir::my_home() else {
@@ -43,7 +43,7 @@ impl SegmentGenerator for CwdSegment {
                     };
 
                     if cwd.starts_with(&home) {
-                        format!("~/{}", cwd.strip_prefix(home).unwrap().to_string_lossy())
+                        format!(" ~/{} ", cwd.strip_prefix(home).unwrap().to_string_lossy())
                     } else {
                         cwd.to_string_lossy().into_owned()
                     }

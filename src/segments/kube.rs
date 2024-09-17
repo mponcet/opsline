@@ -28,7 +28,7 @@ impl SegmentGenerator for KubeSegment {
         };
 
         let segment_context = Segment {
-            text: format!("{} {}", fonts::NerdFonts::SHIP_WHEEL, current_context),
+            text: format!(" {} {} ", fonts::NerdFonts::SHIP_WHEEL, current_context),
             fg,
             bg,
             blinking: false,
@@ -37,7 +37,7 @@ impl SegmentGenerator for KubeSegment {
         // TODO: should be a parameter
         let segment_warning = if current_context.contains("prod") {
             Some(Segment {
-                text: format!(r"{}", fonts::NerdFonts::FA_WARNING),
+                text: format!(r"{} ", fonts::NerdFonts::FA_WARNING),
                 fg,
                 bg,
                 blinking: true,
@@ -51,7 +51,7 @@ impl SegmentGenerator for KubeSegment {
                 Theme::Default => (ForegroundColor(170), BackgroundColor(17)),
             };
             Some(Segment {
-                text: namespace,
+                text: format!(" {} ", namespace),
                 fg,
                 bg,
                 blinking: false,
