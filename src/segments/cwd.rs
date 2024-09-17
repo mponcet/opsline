@@ -55,6 +55,11 @@ impl SegmentGenerator for CwdSegment {
             Theme::Default => (BackgroundColor(241), ForegroundColor(250)),
         };
 
-        Some(Segments::One(Segment { text, bg, fg }))
+        Some(Segments::One(Segment {
+            text,
+            bg,
+            fg,
+            blinking: false,
+        }))
     }
 }

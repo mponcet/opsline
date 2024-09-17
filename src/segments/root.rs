@@ -26,6 +26,11 @@ impl SegmentGenerator for RootSegment {
             Theme::Default => (BackgroundColor(130), ForegroundColor(255)),
         };
 
-        Some(Segments::One(Segment { text, bg, fg }))
+        Some(Segments::One(Segment {
+            text,
+            bg,
+            fg,
+            blinking: false,
+        }))
     }
 }

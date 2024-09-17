@@ -12,6 +12,7 @@ pub struct Segment {
     pub text: String,
     pub bg: BackgroundColor,
     pub fg: ForegroundColor,
+    pub blinking: bool,
 }
 
 pub enum Segments {

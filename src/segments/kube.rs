@@ -26,28 +26,53 @@ impl SegmentGenerator for KubeSegment {
         let (fg, bg) = match theme {
             Theme::Default => (ForegroundColor(117), BackgroundColor(26)),
         };
+
         let segment_context = Segment {
             text: format!("{} {}", fonts::NerdFonts::SHIP_WHEEL, current_context),
             fg,
             bg,
+            blinking: false,
         };
 
-        if let Some(namespace) = context.namespace {
+        // TODO: should be a parameter
+        let segment_warning = if current_context.contains("prod") {
+            Some(Segment {
+                text: format!(r"{}", fonts::NerdFonts::FA_WARNING),
+                fg,
+                bg,
+                blinking: true,
+            })
+        } else {
+            None
+        };
+
+        let segment_namespace = if let Some(namespace) = context.namespace {
             let (fg, bg) = match theme {
                 Theme::Default => (ForegroundColor(170), BackgroundColor(17)),
             };
-            let segment_namespace = Segment {
+            Some(Segment {
                 text: namespace,
                 fg,
                 bg,
-            };
-
-            Some(Segments::Many(Vec::from([
-                segment_context,
-                segment_namespace,
-            ])))
+                blinking: false,
+            })
         } else {
-            Some(Segments::One(segment_context))
+            None
+        };
+
+        match (segment_warning, segment_namespace) {
+            (None, None) => Some(Segments::One(segment_context)),
+            (None, Some(segment_namespace)) => {
+                Some(Segments::Many(vec![segment_context, segment_namespace]))
+            }
+            (Some(segment_warning), None) => {
+                Some(Segments::Many(vec![segment_context, segment_warning]))
+            }
+            (Some(segment_warning), Some(segment_namespace)) => Some(Segments::Many(vec![
+                segment_context,
+                segment_warning,
+                segment_namespace,
+            ])),
         }
     }
 }
