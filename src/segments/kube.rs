@@ -38,7 +38,7 @@ impl SegmentGenerator for KubeSegment {
         let segment_warning = if current_context.contains("prod") {
             Some(Segment {
                 text: format!(r"{} ", fonts::NerdFonts::FA_WARNING),
-                fg,
+                fg: ForegroundColor(196),
                 bg,
                 blinking: true,
             })
