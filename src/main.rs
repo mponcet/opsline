@@ -1,5 +1,7 @@
 use clap::{command, Arg, ArgAction};
-use segments::{cwd::CwdSegment, kube::KubeSegment, root::RootSegment, SegmentGenerator};
+use segments::{
+    cwd::CwdSegment, git::GitSegment, kube::KubeSegment, root::RootSegment, SegmentGenerator,
+};
 use theme::Theme;
 
 mod fonts;
@@ -108,6 +110,12 @@ fn main() {
                 .required(false)
                 .action(ArgAction::Count),
         )
+        .arg(
+            Arg::new("segment-git")
+                .long("segment-git")
+                .required(false)
+                .action(ArgAction::Count),
+        )
         .get_matches();
 
     let shell = match matches.get_one("shell").map(String::as_str) {
@@ -131,6 +139,10 @@ fn main() {
             _ => unreachable!(),
         };
         powerline.add_segment(CwdSegment::new(dironly));
+    }
+
+    if matches.get_count("segment-git") > 0 {
+        powerline.add_segment(GitSegment::new());
     }
 
     if matches.get_count("segment-kube") > 0 {

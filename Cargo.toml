@@ -5,6 +5,7 @@ edition = "2021"
 
 [dependencies]
 clap = { version = "4.5.16", features = ["cargo"] }
+git2 = { version = "0.19.0", default-features = false }
 homedir = "0.3.3"
 kube = { version = "0.94.0", features = ["config"] }
 libc = "0.2.155"

@@ -5,6 +5,7 @@ use crate::{
 };
 
 pub mod cwd;
+pub mod git;
 pub mod kube;
 pub mod root;
 
