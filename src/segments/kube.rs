@@ -29,7 +29,7 @@ impl SegmentGenerator for KubeSegment {
         };
 
         segments.push(Segment {
-            text: format!(" {} {} ", fonts::NerdFonts::SHIP_WHEEL, current_context),
+            text: format!(" {}", fonts::NerdFonts::SHIP_WHEEL),
             fg,
             bg,
             blinking: false,
@@ -38,12 +38,19 @@ impl SegmentGenerator for KubeSegment {
         // TODO: should be a parameter
         if current_context.contains("prod") {
             segments.push(Segment {
-                text: format!(r"{} ", fonts::NerdFonts::FA_WARNING),
+                text: format!(r"{}", fonts::NerdFonts::FA_WARNING),
                 fg: ForegroundColor(196),
                 bg,
                 blinking: true,
             })
         }
+
+        segments.push(Segment {
+            text: format!("{} ", current_context),
+            fg,
+            bg,
+            blinking: false,
+        });
 
         if let Some(namespace) = context.namespace {
             let (fg, bg) = match theme {
