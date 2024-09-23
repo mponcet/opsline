@@ -43,3 +43,14 @@ impl std::fmt::Display for ForegroundColor {
 pub enum Theme {
     Default,
 }
+
+impl TryFrom<&str> for Theme {
+    type Error = Box<dyn std::error::Error>;
+
+    fn try_from(value: &str) -> Result<Self, Self::Error> {
+        match value {
+            "default" => Ok(Theme::Default),
+            _ => Err("unknown theme".into()),
+        }
+    }
+}

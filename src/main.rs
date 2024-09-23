@@ -1,9 +1,10 @@
-use clap::{command, Arg, ArgAction};
+use clap::{command, Arg};
 use segments::{
     cwd::CwdSegment, git::GitSegment, kube::KubeSegment, root::RootSegment, SegmentGenerator,
 };
 use theme::Theme;
 
+mod configuration;
 mod fonts;
 mod segments;
 mod theme;
@@ -19,6 +20,20 @@ enum Shell {
     Bash,
     Zsh,
     Bare,
+}
+
+impl TryFrom<&str> for Shell {
+    type Error = Box<dyn std::error::Error>;
+
+    fn try_from(value: &str) -> Result<Self, Self::Error> {
+        match value {
+            "auto" => todo!(),
+            "bash" => Ok(Shell::Bash),
+            "bare" => Ok(Shell::Bare),
+            "zsh" => Ok(Shell::Zsh),
+            _ => Err("unknown shell".into()),
+        }
+    }
 }
 
 impl Powerline {
@@ -81,76 +96,49 @@ impl Powerline {
 fn main() {
     let matches = command!()
         .arg(
-            Arg::new("shell")
-                .long("shell")
-                .required(true)
-                .value_parser(["bare", "bash", "zsh"]),
-        )
-        .arg(
-            Arg::new("theme")
-                .long("theme")
+            Arg::new("config")
+                .long("config")
+                .value_name("path")
                 .required(false)
-                .default_value("default")
-                .value_parser(["default"]),
-        )
-        .arg(
-            Arg::new("segment-cwd")
-                .long("segment-cwd")
-                .required(false)
-                .value_parser(["dironly", "full"]),
-        )
-        .arg(
-            Arg::new("segment-root")
-                .long("segment-root")
-                .action(ArgAction::Count),
-        )
-        .arg(
-            Arg::new("segment-kube")
-                .long("segment-kube")
-                .required(false)
-                .action(ArgAction::Count),
-        )
-        .arg(
-            Arg::new("segment-git")
-                .long("segment-git")
-                .required(false)
-                .action(ArgAction::Count),
+                .default_value("config.yaml"),
         )
         .get_matches();
 
-    let shell = match matches.get_one("shell").map(String::as_str) {
-        Some("bare") => Shell::Bare,
-        Some("bash") => Shell::Bash,
-        Some("zsh") => todo!(),
-        _ => unreachable!(),
-    };
+    let config_path = matches.get_one::<String>("config").unwrap();
+    let config = configuration::Configuration::try_from_file(config_path)
+        .expect("couldn't get configuration");
 
-    let theme = match matches.get_one("theme").map(String::as_str) {
-        Some("default") => Theme::Default,
-        _ => unreachable!(),
-    };
+    let shell =
+        Shell::try_from(config.shell.as_deref().unwrap_or("auto")).expect("failed to set shell");
+    let theme =
+        Theme::try_from(config.theme.as_deref().unwrap_or("default")).expect("failed to set theme");
 
     let mut powerline: Powerline = Powerline::new(shell, theme);
 
-    if let Some(mode) = matches.get_one::<String>("segment-cwd") {
-        let dironly = match mode.as_str() {
-            "dironly" => true,
-            "full" => false,
-            _ => unreachable!(),
-        };
-        powerline.add_segment(CwdSegment::new(dironly));
-    }
+    if let Some(segments) = config.segments {
+        for segment in segments {
+            match segment.as_str() {
+                "cwd" => {
+                    let dironly = match config.cwd.as_deref().unwrap_or("full") {
+                        "dironly" => true,
+                        "full" => false,
+                        _ => panic!("cwd must be \"full\" or \"dironly\""),
+                    };
+                    powerline.add_segment(CwdSegment::new(dironly));
+                }
 
-    if matches.get_count("segment-git") > 0 {
-        powerline.add_segment(GitSegment::new());
-    }
-
-    if matches.get_count("segment-kube") > 0 {
-        powerline.add_segment(KubeSegment::new());
-    }
-
-    if matches.get_count("segment-root") > 0 {
-        powerline.add_segment(RootSegment::new());
+                "root" => {
+                    powerline.add_segment(RootSegment::new());
+                }
+                "kube" => {
+                    powerline.add_segment(KubeSegment::new());
+                }
+                "git" => {
+                    powerline.add_segment(GitSegment::new());
+                }
+                s => panic!("unknown segment name: {}", s),
+            }
+        }
     }
 
     let ps1 = powerline.prompt();
