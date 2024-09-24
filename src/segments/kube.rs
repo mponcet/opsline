@@ -1,19 +1,22 @@
 use kube::config::Kubeconfig;
 
+use crate::configuration::KubeConfiguration;
 use crate::fonts;
 use crate::segments::{Segment, SegmentGenerator};
 use crate::theme::{BackgroundColor, ForegroundColor, Theme};
 use crate::Shell;
 
-pub struct KubeSegment;
+pub struct KubeSegment<'a> {
+    config: Option<&'a KubeConfiguration>,
+}
 
-impl KubeSegment {
-    pub fn new() -> Self {
-        Self {}
+impl<'a> KubeSegment<'a> {
+    pub fn new(config: Option<&'a KubeConfiguration>) -> Self {
+        Self { config }
     }
 }
 
-impl SegmentGenerator for KubeSegment {
+impl<'a> SegmentGenerator for KubeSegment<'a> {
     fn output(&self, _shell: Shell, theme: &Theme) -> Option<Vec<Segment>> {
         let config = Kubeconfig::read().ok()?;
         let current_context = config.current_context?;
@@ -35,8 +38,13 @@ impl SegmentGenerator for KubeSegment {
             blinking: false,
         });
 
-        // TODO: should be a parameter
-        if current_context.contains("prod") {
+        if self.config.is_some_and(|c| {
+            c.critical_contexts
+                .as_deref()
+                .unwrap_or_default()
+                .iter()
+                .any(|c| current_context.contains(c))
+        }) {
             segments.push(Segment {
                 text: format!(r"{}", fonts::NerdFonts::FA_WARNING),
                 fg: ForegroundColor(196),
@@ -45,8 +53,20 @@ impl SegmentGenerator for KubeSegment {
             })
         }
 
+        let alias = self.config.and_then(|c| {
+            c.context_aliases
+                .as_deref()
+                .unwrap_or_default()
+                .iter()
+                .find(|ka| ka.context == current_context)
+        });
         segments.push(Segment {
-            text: format!("{} ", current_context),
+            text: format!(
+                "{} ",
+                alias
+                    .map(|a| a.alias.as_str())
+                    .unwrap_or(current_context.as_str())
+            ),
             fg,
             bg,
             blinking: false,

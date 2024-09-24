@@ -3,7 +3,17 @@ use serde::Deserialize;
 
 #[derive(Debug, Deserialize)]
 #[allow(unused)]
-pub struct KubeConfig;
+pub struct KubeContextAlias {
+    pub context: String,
+    pub alias: String,
+}
+
+#[derive(Debug, Deserialize)]
+#[allow(unused)]
+pub struct KubeConfiguration {
+    pub critical_contexts: Option<Vec<String>>,
+    pub context_aliases: Option<Vec<KubeContextAlias>>,
+}
 
 #[derive(Debug, Deserialize)]
 #[allow(unused)]
@@ -12,7 +22,7 @@ pub struct Configuration {
     pub segments: Option<Vec<String>>,
     pub theme: Option<String>,
     pub cwd: Option<String>,
-    pub kube: Option<KubeConfig>,
+    pub kube: Option<KubeConfiguration>,
 }
 
 impl Configuration {

@@ -9,10 +9,10 @@ mod fonts;
 mod segments;
 mod theme;
 
-struct Powerline {
+struct Powerline<'a> {
     shell: Shell,
     theme: Theme,
-    segments: Vec<Box<dyn SegmentGenerator + 'static>>,
+    segments: Vec<Box<dyn SegmentGenerator + 'a>>,
 }
 
 #[derive(Clone, Copy)]
@@ -36,7 +36,7 @@ impl TryFrom<&str> for Shell {
     }
 }
 
-impl Powerline {
+impl<'a> Powerline<'a> {
     fn new(shell: Shell, theme: Theme) -> Self {
         Self {
             shell,
@@ -45,7 +45,7 @@ impl Powerline {
         }
     }
 
-    fn add_segment(&mut self, segment: impl SegmentGenerator + 'static) {
+    fn add_segment(&mut self, segment: impl SegmentGenerator + 'a) {
         self.segments.push(Box::new(segment));
     }
 
@@ -131,7 +131,7 @@ fn main() {
                     powerline.add_segment(RootSegment::new());
                 }
                 "kube" => {
-                    powerline.add_segment(KubeSegment::new());
+                    powerline.add_segment(KubeSegment::new(config.kube.as_ref()));
                 }
                 "git" => {
                     powerline.add_segment(GitSegment::new());
