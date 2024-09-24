@@ -20,7 +20,7 @@ impl CwdSegment {
 }
 
 impl SegmentGenerator for CwdSegment {
-    fn output(&self, shell: Shell, theme: &Theme) -> Option<Vec<Segment>> {
+    fn output(&self, shell: Shell, theme: Theme) -> Option<Vec<Segment>> {
         let cwd = std::env::current_dir().unwrap_or_default();
 
         let text = if self.dironly {

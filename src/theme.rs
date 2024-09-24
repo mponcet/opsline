@@ -40,6 +40,7 @@ impl std::fmt::Display for ForegroundColor {
     }
 }
 
+#[derive(Clone, Copy)]
 pub enum Theme {
     Default,
 }

@@ -12,7 +12,7 @@ impl RootSegment {
 }
 
 impl SegmentGenerator for RootSegment {
-    fn output(&self, shell: Shell, theme: &Theme) -> Option<Vec<Segment>> {
+    fn output(&self, shell: Shell, theme: Theme) -> Option<Vec<Segment>> {
         let text = match shell {
             Shell::Bash => r" \$ ".into(),
             Shell::Zsh => todo!(),

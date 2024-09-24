@@ -14,7 +14,7 @@ impl GitSegment {
 }
 
 impl SegmentGenerator for GitSegment {
-    fn output(&self, _shell: Shell, theme: &Theme) -> Option<Vec<Segment>> {
+    fn output(&self, _shell: Shell, theme: Theme) -> Option<Vec<Segment>> {
         let repo = Repository::discover(".").ok()?;
 
         let current_branch =
