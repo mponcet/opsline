@@ -1,97 +1,18 @@
 use clap::{command, Arg};
+
+use powerline::Powerline;
 use segments::{
     cwd::CwdSegment, git::GitSegment, kube::KubeSegment, root::RootSegment, SegmentGenerator,
 };
+use shell::Shell;
 use theme::Theme;
 
 mod configuration;
 mod fonts;
+mod powerline;
 mod segments;
+mod shell;
 mod theme;
-
-struct Powerline<'a> {
-    shell: Shell,
-    theme: Theme,
-    segments: Vec<Box<dyn SegmentGenerator + 'a>>,
-}
-
-#[derive(Clone, Copy)]
-enum Shell {
-    Bash,
-    Zsh,
-    Bare,
-}
-
-impl TryFrom<&str> for Shell {
-    type Error = Box<dyn std::error::Error>;
-
-    fn try_from(value: &str) -> Result<Self, Self::Error> {
-        match value {
-            "auto" => todo!(),
-            "bash" => Ok(Shell::Bash),
-            "bare" => Ok(Shell::Bare),
-            "zsh" => Ok(Shell::Zsh),
-            _ => Err("unknown shell".into()),
-        }
-    }
-}
-
-impl<'a> Powerline<'a> {
-    fn new(shell: Shell, theme: Theme) -> Self {
-        Self {
-            shell,
-            theme,
-            segments: vec![],
-        }
-    }
-
-    fn add_segment(&mut self, segment: impl SegmentGenerator + 'a) {
-        self.segments.push(Box::new(segment));
-    }
-
-    fn prompt(&self) -> String {
-        let mut ps1 = String::with_capacity(256);
-
-        let segments: Vec<_> = self
-            .segments
-            .iter()
-            .filter_map(|s| s.output(self.shell, self.theme))
-            .flatten()
-            .collect();
-
-        for (i, output) in segments.iter().enumerate() {
-            // 38;5 => foreground color
-            // 48;5 => background color
-            let segment_ps1 = format!(
-                r"\[\e[38;5;{}m\]\[\e[48;5;{}m\]{}{}\[\e[0m\]",
-                output.fg,
-                output.bg,
-                if output.blinking { r"\[\e[5m\]" } else { "" },
-                output.text,
-            );
-
-            let segment_triangle = match segments.get(i + 1).map(|o| o.bg) {
-                Some(next_bg) => format!(
-                    r"\[\e[38;5;{}m\]\[\e[48;5;{}m\]{}\[\e[0m\]",
-                    output.bg,
-                    next_bg,
-                    fonts::NerdFonts::LEFT_HARD_DIVIDER,
-                ),
-                // last triangle: don't set background color
-                None => format!(
-                    r"\[\e[38;5;{}m\]{}\[\e[0m\] ",
-                    output.bg,
-                    fonts::NerdFonts::LEFT_HARD_DIVIDER
-                ),
-            };
-
-            ps1.push_str(&segment_ps1);
-            ps1.push_str(&segment_triangle);
-        }
-
-        ps1
-    }
-}
 
 fn main() {
     let matches = command!()
