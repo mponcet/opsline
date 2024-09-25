@@ -1,6 +1,12 @@
 use config::{Config, ConfigError, File};
 use serde::Deserialize;
 
+#[derive(Debug, Default, Deserialize)]
+#[allow(unused)]
+pub struct CwdConfiguration {
+    pub dironly: bool,
+}
+
 #[derive(Debug, Deserialize)]
 #[allow(unused)]
 pub struct KubeContextAlias {
@@ -21,7 +27,7 @@ pub struct Configuration {
     pub shell: Option<String>,
     pub segments: Option<Vec<String>>,
     pub theme: Option<String>,
-    pub cwd: Option<String>,
+    pub cwd: Option<CwdConfiguration>,
     pub kube: Option<KubeConfiguration>,
 }
 

@@ -39,24 +39,10 @@ fn main() {
     if let Some(segments) = config.segments {
         for segment in segments {
             match segment.as_str() {
-                "cwd" => {
-                    let dironly = match config.cwd.as_deref().unwrap_or("full") {
-                        "dironly" => true,
-                        "full" => false,
-                        _ => panic!("cwd must be \"full\" or \"dironly\""),
-                    };
-                    powerline.add_segment(CwdSegment::new(dironly));
-                }
-
-                "root" => {
-                    powerline.add_segment(RootSegment::new());
-                }
-                "kube" => {
-                    powerline.add_segment(KubeSegment::new(config.kube.as_ref()));
-                }
-                "git" => {
-                    powerline.add_segment(GitSegment::new());
-                }
+                "cwd" => powerline.add_segment(CwdSegment::new(config.cwd.as_ref())),
+                "root" => powerline.add_segment(RootSegment::new()),
+                "kube" => powerline.add_segment(KubeSegment::new(config.kube.as_ref())),
+                "git" => powerline.add_segment(GitSegment::new()),
                 s => panic!("unknown segment name: {}", s),
             }
         }

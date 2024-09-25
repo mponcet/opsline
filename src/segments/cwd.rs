@@ -1,29 +1,24 @@
+use crate::configuration::CwdConfiguration;
 use crate::segments::{Segment, SegmentGenerator};
 use crate::theme::{BackgroundColor, ForegroundColor};
 use crate::Shell;
 use crate::Theme;
 
-pub struct CwdSegment {
-    dironly: bool,
+pub struct CwdSegment<'a> {
+    config: Option<&'a CwdConfiguration>,
 }
 
-impl Default for CwdSegment {
-    fn default() -> Self {
-        Self { dironly: true }
+impl<'a> CwdSegment<'a> {
+    pub fn new(config: Option<&'a CwdConfiguration>) -> Self {
+        Self { config }
     }
 }
 
-impl CwdSegment {
-    pub fn new(dironly: bool) -> Self {
-        Self { dironly }
-    }
-}
-
-impl SegmentGenerator for CwdSegment {
+impl<'a> SegmentGenerator for CwdSegment<'a> {
     fn output(&self, shell: Shell, theme: Theme) -> Option<Vec<Segment>> {
         let cwd = std::env::current_dir().unwrap_or_default();
 
-        let text = if self.dironly {
+        let text = if self.config.unwrap_or(&CwdConfiguration::default()).dironly {
             match shell {
                 Shell::Bash => r" \W ".into(),
                 Shell::Zsh => todo!(),
