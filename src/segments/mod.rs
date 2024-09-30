@@ -7,6 +7,7 @@ use crate::{
 pub mod cwd;
 pub mod git;
 pub mod kube;
+pub mod readonly;
 pub mod root;
 pub mod ssh;
 

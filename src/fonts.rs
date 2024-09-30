@@ -12,4 +12,5 @@ impl NerdFonts {
     pub const UPWARDS_BLACK_ARROW: char = '⬆';
     pub const DOWNWARDS_BLACK_ARROW: char = '⬇';
     pub const MD_SSH: char = '󰣀';
+    pub const FA_LOCK: char = '';
 }
