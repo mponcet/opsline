@@ -55,6 +55,12 @@ impl ForegroundColor {
     pub const WHITE: Self = Self(37);
 }
 
+impl From<BackgroundColor> for ForegroundColor {
+    fn from(bg: BackgroundColor) -> Self {
+        ForegroundColor(bg.0)
+    }
+}
+
 impl fmt::Display for ForegroundColor {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, "{}", self.0)

@@ -1,7 +1,7 @@
 use crate::fonts;
 use crate::segments::SegmentGenerator;
 use crate::shell::Shell;
-use crate::theme::{BackgroundColor, Blink, ForegroundColor, Reset, Theme};
+use crate::theme::{Blink, ForegroundColor, Reset, Theme};
 
 pub struct Powerline<'a> {
     shell: Shell,
@@ -46,8 +46,7 @@ impl<'a> Powerline<'a> {
             match segments.get(i + 1).map(|o| o.bg) {
                 Some(next_bg) => print!(
                     r"{}{}{}{}",
-                    unsafe { std::mem::transmute::<BackgroundColor, ForegroundColor>(output.bg) }
-                        .fmt(self.shell),
+                    ForegroundColor::from(output.bg).fmt(self.shell),
                     next_bg.fmt(self.shell),
                     fonts::NerdFonts::LEFT_HARD_DIVIDER,
                     Reset.fmt(self.shell)
@@ -55,8 +54,7 @@ impl<'a> Powerline<'a> {
                 // last triangle: don't set background color
                 None => print!(
                     r"{}{}{} ",
-                    unsafe { std::mem::transmute::<BackgroundColor, ForegroundColor>(output.bg) }
-                        .fmt(self.shell),
+                    ForegroundColor::from(output.bg).fmt(self.shell),
                     fonts::NerdFonts::LEFT_HARD_DIVIDER,
                     Reset.fmt(self.shell)
                 ),
