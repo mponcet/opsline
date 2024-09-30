@@ -48,6 +48,5 @@ fn main() {
         }
     }
 
-    let ps1 = powerline.prompt();
-    println!("{}", ps1);
+    powerline.prompt();
 }

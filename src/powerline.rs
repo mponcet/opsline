@@ -22,9 +22,7 @@ impl<'a> Powerline<'a> {
         self.segments.push(Box::new(segment));
     }
 
-    pub fn prompt(&self) -> String {
-        let mut ps1 = String::with_capacity(256);
-
+    pub fn prompt(&self) {
         let segments: Vec<_> = self
             .segments
             .iter()
@@ -33,21 +31,20 @@ impl<'a> Powerline<'a> {
             .collect();
 
         for (i, output) in segments.iter().enumerate() {
-            let segment_ps1 = format!(
-                r"{}{}{}{}{}",
+            if output.blinking {
+                print!("{}", Blink.fmt(self.shell));
+            }
+
+            print!(
+                r"{}{}{}{}",
                 output.fg.fmt(self.shell),
                 output.bg.fmt(self.shell),
-                if output.blinking {
-                    Box::new(Blink.fmt(self.shell)) as Box<dyn std::fmt::Display>
-                } else {
-                    Box::new("".to_string())
-                },
                 output.text,
                 Reset.fmt(self.shell)
             );
 
-            let segment_triangle = match segments.get(i + 1).map(|o| o.bg) {
-                Some(next_bg) => format!(
+            match segments.get(i + 1).map(|o| o.bg) {
+                Some(next_bg) => print!(
                     r"{}{}{}{}",
                     unsafe { std::mem::transmute::<BackgroundColor, ForegroundColor>(output.bg) }
                         .fmt(self.shell),
@@ -56,7 +53,7 @@ impl<'a> Powerline<'a> {
                     Reset.fmt(self.shell)
                 ),
                 // last triangle: don't set background color
-                None => format!(
+                None => print!(
                     r"{}{}{} ",
                     unsafe { std::mem::transmute::<BackgroundColor, ForegroundColor>(output.bg) }
                         .fmt(self.shell),
@@ -64,11 +61,6 @@ impl<'a> Powerline<'a> {
                     Reset.fmt(self.shell)
                 ),
             };
-
-            ps1.push_str(&segment_ps1);
-            ps1.push_str(&segment_triangle);
         }
-
-        ps1
     }
 }
