@@ -10,7 +10,6 @@ impl TryFrom<&str> for Shell {
 
     fn try_from(value: &str) -> Result<Self, Self::Error> {
         match value {
-            "auto" => todo!(),
             "bash" => Ok(Shell::Bash),
             "bare" => Ok(Shell::Bare),
             "zsh" => Ok(Shell::Zsh),
