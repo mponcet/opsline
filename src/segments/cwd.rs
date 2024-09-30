@@ -21,7 +21,7 @@ impl<'a> SegmentGenerator for CwdSegment<'a> {
         let text = if self.config.unwrap_or(&CwdConfiguration::default()).dironly {
             match shell {
                 Shell::Bash => r" \W ".into(),
-                Shell::Zsh => todo!(),
+                Shell::Zsh => " %1d ".into(),
                 Shell::Bare => cwd
                     .file_name()
                     .unwrap_or_default()
@@ -31,7 +31,7 @@ impl<'a> SegmentGenerator for CwdSegment<'a> {
         } else {
             match shell {
                 Shell::Bash => r" \w ".into(),
-                Shell::Zsh => todo!(),
+                Shell::Zsh => " %d ".into(),
                 Shell::Bare => {
                     let Ok(Some(home)) = homedir::my_home() else {
                         panic!("Can't get home directory");

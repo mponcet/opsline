@@ -30,7 +30,7 @@ impl BackgroundColor {
             fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
                 match self.1 {
                     Shell::Bash => write!(f, r"\[\e[48;5;{}m\]", self.0),
-                    Shell::Zsh => todo!(),
+                    Shell::Zsh => write!(f, "%{{\x1b[48;5;{}m%}}", self.0),
                     Shell::Bare => todo!(),
                 }
             }
@@ -68,7 +68,7 @@ impl ForegroundColor {
             fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
                 match self.1 {
                     Shell::Bash => write!(f, r"\[\e[38;5;{}m\]", self.0),
-                    Shell::Zsh => todo!(),
+                    Shell::Zsh => write!(f, "%{{\x1b[38;5;{}m%}}", self.0),
                     Shell::Bare => todo!(),
                 }
             }
@@ -80,11 +80,6 @@ impl ForegroundColor {
 
 #[derive(Clone, Copy)]
 pub struct Blink;
-impl fmt::Display for Blink {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "")
-    }
-}
 
 impl Blink {
     pub fn fmt(&self, shell: Shell) -> impl fmt::Display {
@@ -93,7 +88,7 @@ impl Blink {
             fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
                 match self.1 {
                     Shell::Bash => write!(f, r"\[\e[5m\]"),
-                    Shell::Zsh => todo!(),
+                    Shell::Zsh => write!(f, "%{{\x1b[5m%}}"),
                     Shell::Bare => todo!(),
                 }
             }
@@ -113,7 +108,7 @@ impl Reset {
             fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
                 match self.1 {
                     Shell::Bash => write!(f, r"\[\e[0m\]"),
-                    Shell::Zsh => todo!(),
+                    Shell::Zsh => write!(f, "%{{\x1b[0m%}}"),
                     Shell::Bare => todo!(),
                 }
             }

@@ -15,7 +15,7 @@ impl SegmentGenerator for RootSegment {
     fn output(&self, shell: Shell, theme: Theme) -> Option<Vec<Segment>> {
         let text = match shell {
             Shell::Bash => r" \$ ".into(),
-            Shell::Zsh => todo!(),
+            Shell::Zsh => " %# ".into(),
             Shell::Bare => match unsafe { libc::getuid() } {
                 0 => " # ".into(),
                 _ => " $ ".into(),
