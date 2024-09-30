@@ -127,6 +127,7 @@ impl Reset {
 #[derive(Clone, Copy)]
 pub enum Theme {
     Default,
+    Gruvbox,
 }
 
 impl TryFrom<&str> for Theme {
@@ -135,6 +136,7 @@ impl TryFrom<&str> for Theme {
     fn try_from(value: &str) -> Result<Self, Self::Error> {
         match value {
             "default" => Ok(Theme::Default),
+            "gruvbox" => Ok(Theme::Gruvbox),
             _ => Err("unknown theme".into()),
         }
     }

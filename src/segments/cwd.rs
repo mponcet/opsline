@@ -48,6 +48,7 @@ impl<'a> SegmentGenerator for CwdSegment<'a> {
 
         let (bg, fg) = match theme {
             Theme::Default => (BackgroundColor(241), ForegroundColor(250)),
+            Theme::Gruvbox => (BackgroundColor(66), ForegroundColor(250)),
         };
 
         Some(Vec::from([Segment {

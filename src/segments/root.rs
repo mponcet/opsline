@@ -23,7 +23,8 @@ impl SegmentGenerator for RootSegment {
         };
 
         let (bg, fg) = match theme {
-            Theme::Default => (BackgroundColor(130), ForegroundColor(255)),
+            Theme::Default => (BackgroundColor(236), ForegroundColor(15)),
+            Theme::Gruvbox => (BackgroundColor(237), ForegroundColor(246)),
         };
 
         Some(Vec::from([Segment {

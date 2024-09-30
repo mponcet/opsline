@@ -27,14 +27,15 @@ impl<'a> SegmentGenerator for KubeSegment<'a> {
             .map(|c| c.context.clone())??;
         let mut segments = Vec::new();
 
-        let (fg, bg) = match theme {
-            Theme::Default => (ForegroundColor(117), BackgroundColor(26)),
+        let (bg, fg) = match theme {
+            Theme::Default => (BackgroundColor(26), ForegroundColor(117)),
+            Theme::Gruvbox => (BackgroundColor(235), ForegroundColor(229)),
         };
 
         segments.push(Segment {
             text: format!(" {}", fonts::NerdFonts::SHIP_WHEEL),
-            fg,
             bg,
+            fg,
             blinking: false,
         });
 
@@ -73,13 +74,14 @@ impl<'a> SegmentGenerator for KubeSegment<'a> {
         });
 
         if let Some(namespace) = context.namespace {
-            let (fg, bg) = match theme {
-                Theme::Default => (ForegroundColor(170), BackgroundColor(17)),
+            let (bg, fg) = match theme {
+                Theme::Default => (BackgroundColor(17), ForegroundColor(170)),
+                Theme::Gruvbox => (BackgroundColor(236), ForegroundColor(229)),
             };
             segments.push(Segment {
                 text: format!(" {} ", namespace),
-                fg,
                 bg,
+                fg,
                 blinking: false,
             })
         }

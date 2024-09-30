@@ -45,6 +45,7 @@ impl SegmentGenerator for GitSegment {
 
         let (bg, fg) = match theme {
             Theme::Default => (BackgroundColor(148), ForegroundColor(0)),
+            Theme::Gruvbox => (BackgroundColor(100), ForegroundColor(237)),
         };
 
         let mut segments = Vec::from([Segment {
@@ -61,18 +62,28 @@ impl SegmentGenerator for GitSegment {
         if let (Some(local), Some(upstream)) = (local, upstream) {
             if let Ok((ahead, behind)) = repo.graph_ahead_behind(local, upstream) {
                 if ahead > 0 {
+                    let (bg, fg) = match theme {
+                        Theme::Default => (BackgroundColor(240), ForegroundColor(250)),
+                        Theme::Gruvbox => (BackgroundColor(239), ForegroundColor(248)),
+                    };
+
                     segments.push(Segment {
                         text: format!(" {}{} ", ahead, NerdFonts::UPWARDS_BLACK_ARROW),
-                        bg: BackgroundColor(240),
-                        fg: ForegroundColor(250),
+                        bg,
+                        fg,
                         blinking: false,
                     });
                 }
                 if behind > 0 {
+                    let (bg, fg) = match theme {
+                        Theme::Default => (BackgroundColor(240), ForegroundColor(250)),
+                        Theme::Gruvbox => (BackgroundColor(239), ForegroundColor(248)),
+                    };
+
                     segments.push(Segment {
                         text: format!(" {}{} ", behind, NerdFonts::DOWNWARDS_BLACK_ARROW),
-                        bg: BackgroundColor(240),
-                        fg: ForegroundColor(250),
+                        bg,
+                        fg,
                         blinking: false,
                     });
                 }
@@ -105,6 +116,7 @@ impl SegmentGenerator for GitSegment {
         if staged > 0 {
             let (bg, fg) = match theme {
                 Theme::Default => (BackgroundColor(22), ForegroundColor(15)),
+                Theme::Gruvbox => (BackgroundColor(106), ForegroundColor(229)),
             };
 
             segments.push(Segment {
@@ -118,6 +130,7 @@ impl SegmentGenerator for GitSegment {
         if modified > 0 {
             let (bg, fg) = match theme {
                 Theme::Default => (BackgroundColor(130), ForegroundColor(15)),
+                Theme::Gruvbox => (BackgroundColor(166), ForegroundColor(229)),
             };
 
             segments.push(Segment {
@@ -131,6 +144,7 @@ impl SegmentGenerator for GitSegment {
         if untracked > 0 {
             let (bg, fg) = match theme {
                 Theme::Default => (BackgroundColor(52), ForegroundColor(15)),
+                Theme::Gruvbox => (BackgroundColor(88), ForegroundColor(229)),
             };
 
             segments.push(Segment {
@@ -144,6 +158,7 @@ impl SegmentGenerator for GitSegment {
         if conflicted > 0 {
             let (bg, fg) = match theme {
                 Theme::Default => (BackgroundColor(9), ForegroundColor(15)),
+                Theme::Gruvbox => (BackgroundColor(124), ForegroundColor(229)),
             };
 
             segments.push(Segment {
