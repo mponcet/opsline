@@ -2,8 +2,8 @@ use clap::{command, Arg};
 
 use powerline::Powerline;
 use segments::{
-    cwd::CwdSegment, git::GitSegment, kube::KubeSegment, readonly::ReadonlySegment,
-    root::RootSegment, ssh::SshSegment, SegmentGenerator,
+    containers::ContainersSegment, cwd::CwdSegment, git::GitSegment, kube::KubeSegment,
+    readonly::ReadonlySegment, root::RootSegment, ssh::SshSegment, SegmentGenerator,
 };
 use shell::Shell;
 use theme::Theme;
@@ -46,6 +46,9 @@ fn main() {
                 "git" => powerline.add_segment(GitSegment::new()),
                 "ssh" => powerline.add_segment(SshSegment::new()),
                 "readonly" => powerline.add_segment(ReadonlySegment::new()),
+                "containers" => {
+                    powerline.add_segment(ContainersSegment::new(config.containers.as_ref()))
+                }
                 s => panic!("unknown segment name: {}", s),
             }
         }

@@ -4,6 +4,7 @@ use crate::{
     Shell,
 };
 
+pub mod containers;
 pub mod cwd;
 pub mod git;
 pub mod kube;
