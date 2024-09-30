@@ -1,3 +1,7 @@
+use std::fmt;
+
+use crate::shell::Shell;
+
 #[derive(Clone, Copy)]
 pub struct BackgroundColor(pub u8);
 
@@ -13,9 +17,26 @@ impl BackgroundColor {
     pub const WHITE: Self = Self(47);
 }
 
-impl std::fmt::Display for BackgroundColor {
+impl fmt::Display for BackgroundColor {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, "{}", self.0)
+    }
+}
+
+impl BackgroundColor {
+    pub fn fmt(&self, shell: Shell) -> impl fmt::Display {
+        struct Helper(BackgroundColor, Shell);
+        impl fmt::Display for Helper {
+            fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+                match self.1 {
+                    Shell::Bash => write!(f, r"\[\e[48;5;{}m\]", self.0),
+                    Shell::Zsh => todo!(),
+                    Shell::Bare => todo!(),
+                }
+            }
+        }
+
+        Helper(*self, shell)
     }
 }
 
@@ -34,9 +55,71 @@ impl ForegroundColor {
     pub const WHITE: Self = Self(37);
 }
 
-impl std::fmt::Display for ForegroundColor {
+impl fmt::Display for ForegroundColor {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, "{}", self.0)
+    }
+}
+
+impl ForegroundColor {
+    pub fn fmt(&self, shell: Shell) -> impl fmt::Display {
+        struct Helper(ForegroundColor, Shell);
+        impl fmt::Display for Helper {
+            fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+                match self.1 {
+                    Shell::Bash => write!(f, r"\[\e[38;5;{}m\]", self.0),
+                    Shell::Zsh => todo!(),
+                    Shell::Bare => todo!(),
+                }
+            }
+        }
+
+        Helper(*self, shell)
+    }
+}
+
+#[derive(Clone, Copy)]
+pub struct Blink;
+impl fmt::Display for Blink {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "")
+    }
+}
+
+impl Blink {
+    pub fn fmt(&self, shell: Shell) -> impl fmt::Display {
+        struct Helper(Blink, Shell);
+        impl fmt::Display for Helper {
+            fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+                match self.1 {
+                    Shell::Bash => write!(f, r"\[\e[5m\]"),
+                    Shell::Zsh => todo!(),
+                    Shell::Bare => todo!(),
+                }
+            }
+        }
+
+        Helper(*self, shell)
+    }
+}
+
+#[derive(Clone, Copy)]
+pub struct Reset;
+
+impl Reset {
+    pub fn fmt(&self, shell: Shell) -> impl fmt::Display {
+        struct Helper(Reset, Shell);
+        impl fmt::Display for Helper {
+            fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+                match self.1 {
+                    Shell::Bash => write!(f, r"\[\e[0m\]"),
+                    Shell::Zsh => todo!(),
+                    Shell::Bare => todo!(),
+                }
+            }
+        }
+
+        Helper(*self, shell)
     }
 }
 
