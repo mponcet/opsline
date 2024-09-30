@@ -11,4 +11,5 @@ impl NerdFonts {
     pub const FULLWIDTH_PLUS_SIGN: char = '+';
     pub const UPWARDS_BLACK_ARROW: char = '⬆';
     pub const DOWNWARDS_BLACK_ARROW: char = '⬇';
+    pub const MD_SSH: char = '󰣀';
 }

@@ -8,6 +8,7 @@ pub mod cwd;
 pub mod git;
 pub mod kube;
 pub mod root;
+pub mod ssh;
 
 pub struct Segment {
     pub text: String,
