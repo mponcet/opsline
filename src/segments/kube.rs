@@ -24,7 +24,7 @@ impl<'a> SegmentGenerator for KubeSegment<'a> {
             .contexts
             .iter()
             .find(|c| c.name == current_context)
-            .map(|c| c.context.clone())??;
+            .map(|c| c.context.as_ref())??;
         let mut segments = Vec::new();
 
         let (bg, fg) = match theme {
@@ -73,7 +73,7 @@ impl<'a> SegmentGenerator for KubeSegment<'a> {
             blinking: false,
         });
 
-        if let Some(namespace) = context.namespace {
+        if let Some(ref namespace) = context.namespace {
             let (bg, fg) = match theme {
                 Theme::Default => (BackgroundColor(17), ForegroundColor(170)),
                 Theme::Gruvbox => (BackgroundColor(236), ForegroundColor(229)),
