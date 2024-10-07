@@ -16,7 +16,8 @@ mod shell;
 mod theme;
 
 fn main() {
-    env_logger::Builder::from_env(env_logger::Env::default().default_filter_or("none")).init();
+    env_logger::Builder::from_env(env_logger::Env::default().filter_or("OPSLINE_LOG", "none"))
+        .init();
 
     let matches = command!()
         .arg(
