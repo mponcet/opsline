@@ -48,7 +48,13 @@ impl Connector for UnixConnector {
         }
 
         let config = details.config;
-        let stream = UnixStream::connect(self.path.as_path())?;
+        let stream = match UnixStream::connect(self.path.as_path()) {
+            Ok(stream) => stream,
+            Err(e) => {
+                log::error!("connection failed: {}", e);
+                return Err(ureq::Error::Io(e));
+            }
+        };
         let buffers = LazyBuffers::new(config.input_buffer_size, config.output_buffer_size);
         let transport = UnixStreamTransport::new(stream, buffers);
 
@@ -141,29 +147,39 @@ struct Container {
     state: String,
 }
 
-fn list_containers(url: &str) -> Result<Vec<Container>, Box<dyn std::error::Error>> {
-    if let Some(path) = url.strip_prefix("unix:") {
+fn list_containers(url: &str) -> Option<Vec<Container>> {
+    log::info!("listing containers at {}", url);
+    let request = if let Some(path) = url.strip_prefix("unix:") {
         let config = Config::default();
         let resolver = FakeResolver;
         let connector = UnixConnector::new(path);
         let agent = Agent::with_parts(config, connector, resolver);
 
-        match agent.get("http://d/containers/json?all=true").call() {
-            Ok(mut response) => Ok(response.body_mut().read_json::<Vec<Container>>()?),
-            Err(_) => Err("couldn't list containers".into()),
-        }
+        agent.get("http://d/containers/json?all=true")
     } else {
-        match ureq::get(format!("{}/containers/json?all=true", url)).call() {
-            Ok(mut response) => Ok(response.body_mut().read_json::<Vec<Container>>()?),
-            Err(_) => Err("couldn't list containers".into()),
-        }
-    }
+        ureq::get(format!("{}/containers/json?all=true", url))
+    };
+
+    let mut response = request
+        .call()
+        .map_err(|_| {
+            log::error!("http request failed");
+        })
+        .ok()?;
+
+    response
+        .body_mut()
+        .read_json::<Vec<Container>>()
+        .map_err(|_| {
+            log::error!("body deserialization failed");
+        })
+        .ok()
 }
 
 impl<'a> SegmentGenerator for ContainersSegment<'a> {
     fn output(&self, _shell: Shell, theme: Theme) -> Option<Vec<Segment>> {
         let url = self.config.as_ref()?.url.as_ref()?;
-        let containers = list_containers(url).ok()?;
+        let containers = list_containers(url)?;
 
         let (bg, fg) = match theme {
             Theme::Default => (BackgroundColor(55), ForegroundColor(177)),

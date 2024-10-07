@@ -34,7 +34,8 @@ impl<'a> SegmentGenerator for CwdSegment<'a> {
                 Shell::Zsh => " %d ".into(),
                 Shell::Bare => {
                     let Ok(Some(home)) = homedir::my_home() else {
-                        panic!("Can't get home directory");
+                        log::error!("failed to get home directory");
+                        return None;
                     };
 
                     if cwd.starts_with(&home) {

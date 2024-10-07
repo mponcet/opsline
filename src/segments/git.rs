@@ -16,6 +16,7 @@ impl GitSegment {
 impl SegmentGenerator for GitSegment {
     fn output(&self, _shell: Shell, theme: Theme) -> Option<Vec<Segment>> {
         let repo = Repository::discover(".").ok()?;
+        log::info!("repository found at {}", repo.path().to_string_lossy());
 
         let current_branch =
             repo.branches(Some(BranchType::Local))
@@ -94,22 +95,31 @@ impl SegmentGenerator for GitSegment {
         let mut staged = 0;
         let mut untracked = 0;
         let mut conflicted = 0;
-        let statuses = repo.statuses(None).ok()?;
-        for status in statuses.iter() {
-            let status = status.status();
-            if status.is_wt_modified() || status.is_wt_deleted() || status.is_wt_typechange() {
-                modified += 1;
-            } else if status.is_index_new()
-                || status.is_index_modified()
-                || status.is_index_deleted()
-                || status.is_index_renamed()
-                || status.is_index_typechange()
-            {
-                staged += 1;
-            } else if status.is_wt_new() {
-                untracked += 1;
-            } else if status.is_conflicted() {
-                conflicted += 1;
+        match repo.statuses(None) {
+            Ok(statuses) => {
+                for status in statuses.iter() {
+                    let status = status.status();
+                    if status.is_wt_modified()
+                        || status.is_wt_deleted()
+                        || status.is_wt_typechange()
+                    {
+                        modified += 1;
+                    } else if status.is_index_new()
+                        || status.is_index_modified()
+                        || status.is_index_deleted()
+                        || status.is_index_renamed()
+                        || status.is_index_typechange()
+                    {
+                        staged += 1;
+                    } else if status.is_wt_new() {
+                        untracked += 1;
+                    } else if status.is_conflicted() {
+                        conflicted += 1;
+                    }
+                }
+            }
+            Err(_) => {
+                log::error!("failed to get git repository status");
             }
         }
 

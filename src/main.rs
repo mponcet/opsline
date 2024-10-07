@@ -16,6 +16,8 @@ mod shell;
 mod theme;
 
 fn main() {
+    env_logger::Builder::from_env(env_logger::Env::default().default_filter_or("none")).init();
+
     let matches = command!()
         .arg(
             Arg::new("config")
