@@ -33,8 +33,7 @@ fn main() {
     let config = configuration::Configuration::try_from_file(config_path)
         .expect("couldn't get configuration");
 
-    let shell =
-        Shell::try_from(config.shell.as_deref().unwrap_or("auto")).expect("failed to set shell");
+    let shell = Shell::try_from(config.shell.as_str()).expect("failed to set shell");
     let theme =
         Theme::try_from(config.theme.as_deref().unwrap_or("default")).expect("failed to set theme");
 

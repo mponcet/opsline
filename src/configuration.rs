@@ -24,13 +24,13 @@ pub struct KubeConfiguration {
 #[derive(Debug, Deserialize)]
 #[allow(unused)]
 pub struct ContainersConfiguration {
-    pub url: Option<String>,
+    pub url: String,
 }
 
 #[derive(Debug, Deserialize)]
 #[allow(unused)]
 pub struct Configuration {
-    pub shell: Option<String>,
+    pub shell: String,
     pub segments: Option<Vec<String>>,
     pub theme: Option<String>,
     pub cwd: Option<CwdConfiguration>,

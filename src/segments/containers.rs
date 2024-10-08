@@ -178,7 +178,7 @@ fn list_containers(url: &str) -> Option<Vec<Container>> {
 
 impl<'a> SegmentGenerator for ContainersSegment<'a> {
     fn output(&self, _shell: Shell, theme: Theme) -> Option<Vec<Segment>> {
-        let url = self.config.as_ref()?.url.as_ref()?;
+        let url = self.config.as_ref()?.url.as_ref();
         let containers = list_containers(url)?;
 
         let (bg, fg) = match theme {
