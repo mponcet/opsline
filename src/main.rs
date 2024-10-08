@@ -2,8 +2,8 @@ use clap::{command, Arg};
 
 use powerline::Powerline;
 use segments::{
-    containers::ContainersSegment, cwd::CwdSegment, git::GitSegment, kube::KubeSegment,
-    readonly::ReadonlySegment, root::RootSegment, ssh::SshSegment, SegmentGenerator,
+    ContainersSegment, CwdSegment, GitSegment, KubeSegment, ReadonlySegment, RootSegment,
+    SegmentGenerator, SshSegment,
 };
 use shell::Shell;
 use theme::Theme;
