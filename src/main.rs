@@ -14,6 +14,7 @@ mod powerline;
 mod segments;
 mod shell;
 mod theme;
+mod utils;
 
 fn main() {
     env_logger::Builder::from_env(env_logger::Env::default().filter_or("OPSLINE_LOG", "none"))
