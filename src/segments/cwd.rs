@@ -5,11 +5,11 @@ use crate::Shell;
 use crate::Theme;
 
 pub struct CwdSegment<'a> {
-    config: Option<&'a CwdConfiguration>,
+    config: &'a CwdConfiguration,
 }
 
 impl<'a> CwdSegment<'a> {
-    pub fn new(config: Option<&'a CwdConfiguration>) -> Self {
+    pub fn new(config: &'a CwdConfiguration) -> Self {
         Self { config }
     }
 }
@@ -18,7 +18,7 @@ impl<'a> SegmentGenerator for CwdSegment<'a> {
     fn output(&self, shell: Shell, theme: Theme) -> Option<Vec<Segment>> {
         let cwd = std::env::current_dir().unwrap_or_default();
 
-        let text = if self.config.unwrap_or(&CwdConfiguration::default()).dironly {
+        let text = if self.config.dironly {
             match shell {
                 Shell::Bash => r" \W ".into(),
                 Shell::Zsh => " %1d ".into(),

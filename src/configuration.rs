@@ -1,49 +1,59 @@
-use config::{Config, ConfigError, File};
-use serde::Deserialize;
+use figment::{
+    providers::{Format, Serialized, Yaml},
+    Figment,
+};
+use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Default, Deserialize)]
-#[allow(unused)]
+#[derive(Debug, Default, Deserialize, Serialize)]
 pub struct CwdConfiguration {
     pub dironly: bool,
 }
 
-#[derive(Debug, Deserialize)]
-#[allow(unused)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct KubeContextAlias {
     pub context: String,
     pub alias: String,
 }
 
-#[derive(Debug, Deserialize)]
-#[allow(unused)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct KubeConfiguration {
     pub critical_contexts: Option<Vec<String>>,
     pub context_aliases: Option<Vec<KubeContextAlias>>,
 }
 
-#[derive(Debug, Deserialize)]
-#[allow(unused)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct ContainersConfiguration {
     pub url: String,
 }
 
-#[derive(Debug, Deserialize)]
-#[allow(unused)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct Configuration {
     pub shell: String,
-    pub segments: Option<Vec<String>>,
-    pub theme: Option<String>,
-    pub cwd: Option<CwdConfiguration>,
+    pub segments: Vec<String>,
+    pub theme: String,
+    pub cwd: CwdConfiguration,
     pub kube: Option<KubeConfiguration>,
     pub containers: Option<ContainersConfiguration>,
 }
 
-impl Configuration {
-    pub fn try_from_file(path: &str) -> Result<Configuration, ConfigError> {
-        let builder = Config::builder()
-            .add_source(File::with_name(path))
-            .build()?;
+impl Default for Configuration {
+    fn default() -> Self {
+        Self {
+            // TODO: don't default to bash
+            shell: "bash".into(),
+            segments: vec!["cwd".into(), "root".into()],
+            theme: "default".into(),
+            cwd: CwdConfiguration::default(),
+            kube: None,
+            containers: None,
+        }
+    }
+}
 
-        builder.try_deserialize()
+impl Configuration {
+    pub fn try_from_file(path: &str) -> Result<Configuration, figment::Error> {
+        Figment::from(Serialized::defaults(Configuration::default()))
+            .merge(Yaml::file(path))
+            .extract()
     }
 }

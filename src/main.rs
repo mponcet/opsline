@@ -35,25 +35,22 @@ fn main() {
         .expect("couldn't get configuration");
 
     let shell = Shell::try_from(config.shell.as_str()).expect("failed to set shell");
-    let theme =
-        Theme::try_from(config.theme.as_deref().unwrap_or("default")).expect("failed to set theme");
+    let theme = Theme::try_from(config.theme.as_str()).expect("failed to set theme");
 
     let mut powerline: Powerline = Powerline::new(shell, theme);
 
-    if let Some(segments) = config.segments {
-        for segment in segments {
-            match segment.as_str() {
-                "cwd" => powerline.add_segment(CwdSegment::new(config.cwd.as_ref())),
-                "root" => powerline.add_segment(RootSegment::new()),
-                "kube" => powerline.add_segment(KubeSegment::new(config.kube.as_ref())),
-                "git" => powerline.add_segment(GitSegment::new()),
-                "ssh" => powerline.add_segment(SshSegment::new()),
-                "readonly" => powerline.add_segment(ReadonlySegment::new()),
-                "containers" => {
-                    powerline.add_segment(ContainersSegment::new(config.containers.as_ref()))
-                }
-                s => panic!("unknown segment name: {}", s),
+    for segment in config.segments {
+        match segment.as_str() {
+            "cwd" => powerline.add_segment(CwdSegment::new(&config.cwd)),
+            "root" => powerline.add_segment(RootSegment::new()),
+            "kube" => powerline.add_segment(KubeSegment::new(config.kube.as_ref())),
+            "git" => powerline.add_segment(GitSegment::new()),
+            "ssh" => powerline.add_segment(SshSegment::new()),
+            "readonly" => powerline.add_segment(ReadonlySegment::new()),
+            "containers" => {
+                powerline.add_segment(ContainersSegment::new(config.containers.as_ref()))
             }
+            s => panic!("unknown segment name: {}", s),
         }
     }
 
