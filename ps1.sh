@@ -2,7 +2,7 @@
 
 # for testing purpose
 function _update_ps1() {
-    PS1="$(~/dev/opsline/target/debug/opsline --config ~/.config/opsline/opsline.yaml)"
+    PS1="$(~/dev/opsline/target/debug/opsline --shell bash --config ~/.config/opsline/opsline.yaml)"
 }
 
 if [ "$TERM" != "linux" ] && command -v opsline; then

@@ -18,7 +18,7 @@ Add the following to your `.bashrc` :
 
 ```
 function _update_ps1() {
-    PS1="$(opsline --config ~/.config/opsline/opsline.yaml)"
+    PS1="$(opsline --shell bash --config ~/.config/opsline/opsline.yaml)"
 }
 
 if [ "$TERM" != "linux" ] && command -v opsline 2>&1 >/dev/null; then
@@ -32,7 +32,7 @@ Add the following to your `.zshrc` :
 
 ```
 function _update_ps1() {
-    PS1="$(opsline --config ~/.config/opsline/opsline.yaml)"
+    PS1="$(opsline --shell zsh --config ~/.config/opsline/opsline.yaml)"
 }
 
 if [ "$TERM" != "linux" ] && command -v opsline 2>&1 >/dev/null; then
@@ -45,7 +45,6 @@ fi
 ### Example
 
 ```
-shell: bash
 theme: gruvbox
 segments:
   - cwd

@@ -22,6 +22,12 @@ fn main() {
 
     let matches = command!()
         .arg(
+            Arg::new("shell")
+                .long("shell")
+                .value_parser(["bash", "zsh"])
+                .required(true),
+        )
+        .arg(
             Arg::new("config")
                 .long("config")
                 .value_name("path")
@@ -34,7 +40,8 @@ fn main() {
     let config = configuration::Configuration::try_from_file(config_path)
         .expect("couldn't get configuration");
 
-    let shell = Shell::try_from(config.shell.as_str()).expect("failed to set shell");
+    let shell = matches.get_one::<String>("shell").unwrap();
+    let shell = Shell::try_from(shell.as_str()).expect("failed to set shell");
     let theme = Theme::try_from(config.theme.as_str()).expect("failed to set theme");
 
     let mut powerline: Powerline = Powerline::new(shell, theme);

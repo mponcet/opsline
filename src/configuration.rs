@@ -28,7 +28,6 @@ pub struct ContainersConfiguration {
 
 #[derive(Debug, Deserialize, Serialize)]
 pub struct Configuration {
-    pub shell: String,
     pub segments: Vec<String>,
     pub theme: String,
     pub cwd: CwdConfiguration,
@@ -39,8 +38,6 @@ pub struct Configuration {
 impl Default for Configuration {
     fn default() -> Self {
         Self {
-            // TODO: don't default to bash
-            shell: "bash".into(),
             segments: vec!["cwd".into(), "root".into()],
             theme: "default".into(),
             cwd: CwdConfiguration::default(),
