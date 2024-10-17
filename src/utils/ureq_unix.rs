@@ -32,13 +32,11 @@ impl Connector for UnixConnector {
         }
 
         let config = details.config;
-        let stream = match UnixStream::connect(self.path.as_path()) {
-            Ok(stream) => stream,
-            Err(e) => {
-                log::error!("connection failed: {}", e);
-                return Err(ureq::Error::Io(e));
-            }
-        };
+        let stream = UnixStream::connect(self.path.as_path()).map_err(|e| {
+            log::error!("connection failed: {}", e);
+            ureq::Error::Io(e)
+        })?;
+
         let buffers = LazyBuffers::new(config.input_buffer_size, config.output_buffer_size);
         let transport = UnixStreamTransport::new(stream, buffers);
 
@@ -70,20 +68,28 @@ impl Transport for UnixStreamTransport {
         &mut self.buffers
     }
 
-    fn transmit_output(&mut self, amount: usize, _timeout: NextTimeout) -> Result<(), ureq::Error> {
+    fn transmit_output(&mut self, amount: usize, timeout: NextTimeout) -> Result<(), ureq::Error> {
         let output = &self.buffers.output()[..amount];
-        self.stream.write_all(output)?;
+        self.stream.set_write_timeout(Some(*timeout.after))?;
+        self.stream.write_all(output).map_err(|e| {
+            log::error!("{:?}", e);
+            e
+        })?;
 
         Ok(())
     }
 
-    fn await_input(&mut self, _timeout: NextTimeout) -> Result<bool, ureq::Error> {
+    fn await_input(&mut self, timeout: NextTimeout) -> Result<bool, ureq::Error> {
         if self.buffers.can_use_input() {
             return Ok(true);
         }
 
         let input = self.buffers.input_append_buf();
-        let amount = self.stream.read(input)?;
+        self.stream.set_read_timeout(Some(*timeout.after))?;
+        let amount = self.stream.read(input).map_err(|e| {
+            log::error!("{:?}", e);
+            e
+        })?;
         self.buffers.input_appended(amount);
 
         Ok(amount > 0)
@@ -128,10 +134,35 @@ impl Resolver for FakeResolver {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use std::time::Duration;
+    use ureq::Timeouts;
 
     #[test]
     fn test_podman_unix_socket() {
         let config = Config::default();
+        let resolver = FakeResolver;
+        let connector = UnixConnector::new(format!("/run/user/{}/podman/podman.sock", unsafe {
+            libc::getuid()
+        }));
+        let agent = ureq::Agent::with_parts(config, connector, resolver);
+
+        let url = "http://d/_ping";
+        match agent.get(url).call() {
+            Ok(mut result) => assert_eq!(result.body_mut().read_to_string().unwrap(), "OK"),
+            Err(_) => panic!("failed to get {}", url),
+        }
+    }
+
+    #[test]
+    #[should_panic]
+    fn test_podman_unix_socket_timeout() {
+        let config = Config {
+            timeouts: Timeouts {
+                global: Some(Duration::from_millis(1)),
+                ..Default::default()
+            },
+            ..Default::default()
+        };
         let resolver = FakeResolver;
         let connector = UnixConnector::new(format!("/run/user/{}/podman/podman.sock", unsafe {
             libc::getuid()

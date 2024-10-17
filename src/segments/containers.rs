@@ -1,10 +1,14 @@
+use std::time::Duration;
+use ureq::{Agent, Config, Timeouts};
+
 use crate::configuration::ContainersConfiguration;
 use crate::fonts;
 use crate::segments::{Segment, SegmentGenerator};
 use crate::shell::Shell;
 use crate::theme::{BackgroundColor, ForegroundColor, Theme};
 use crate::utils::ureq_unix::{FakeResolver, UnixConnector};
-use ureq::{Agent, Config};
+
+const REQUEST_TIMEOUT_MS: u64 = 500;
 
 pub struct ContainersSegment<'a> {
     config: Option<&'a ContainersConfiguration>,
@@ -22,27 +26,38 @@ struct Container {
     state: String,
 }
 
-fn list_containers(url: &str) -> Option<Vec<Container>> {
+fn list_containers<T: AsRef<str>>(url: T, timeout: Option<Duration>) -> Option<Vec<Container>> {
+    let url = url.as_ref();
     log::info!("listing containers at {}", url);
+
+    let config = if timeout.is_some() {
+        Config {
+            timeouts: Timeouts {
+                global: timeout,
+                ..Default::default()
+            },
+            ..Default::default()
+        }
+    } else {
+        Config::default()
+    };
+
     let request = if let Some(path) = url.strip_prefix("unix:") {
-        let config = Config::default();
         let resolver = FakeResolver;
         let connector = UnixConnector::new(path);
         let agent = Agent::with_parts(config, connector, resolver);
-
         agent.get("http://d/containers/json?all=true")
     } else {
-        ureq::get(format!("{}/containers/json?all=true", url))
+        let agent: Agent = config.into();
+        agent.get(format!("{}/containers/json?all=true", url))
     };
 
-    let mut response = request
+    request
         .call()
         .map_err(|_| {
             log::error!("http request failed");
         })
-        .ok()?;
-
-    response
+        .ok()?
         .body_mut()
         .read_json::<Vec<Container>>()
         .map_err(|_| {
@@ -53,8 +68,8 @@ fn list_containers(url: &str) -> Option<Vec<Container>> {
 
 impl<'a> SegmentGenerator for ContainersSegment<'a> {
     fn output(&self, _shell: Shell, theme: Theme) -> Option<Vec<Segment>> {
-        let url = self.config.as_ref()?.url.as_ref();
-        let containers = list_containers(url)?;
+        let url = &self.config.as_ref()?.url;
+        let containers = list_containers(url, Some(Duration::from_millis(REQUEST_TIMEOUT_MS)))?;
 
         let (bg, fg) = match theme {
             Theme::Default => (BackgroundColor(55), ForegroundColor(177)),
