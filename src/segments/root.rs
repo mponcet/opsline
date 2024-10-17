@@ -16,10 +16,6 @@ impl SegmentGenerator for RootSegment {
         let text = match shell {
             Shell::Bash => r" \$ ".into(),
             Shell::Zsh => " %# ".into(),
-            Shell::Bare => match unsafe { libc::getuid() } {
-                0 => " # ".into(),
-                _ => " $ ".into(),
-            },
         };
 
         let (bg, fg) = match theme {

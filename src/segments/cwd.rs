@@ -16,34 +16,15 @@ impl<'a> CwdSegment<'a> {
 
 impl<'a> SegmentGenerator for CwdSegment<'a> {
     fn output(&self, shell: Shell, theme: Theme) -> Option<Vec<Segment>> {
-        let cwd = std::env::current_dir().unwrap_or_default();
-
         let text = if self.config.dironly {
             match shell {
                 Shell::Bash => r" \W ".into(),
                 Shell::Zsh => " %1d ".into(),
-                Shell::Bare => cwd
-                    .file_name()
-                    .unwrap_or_default()
-                    .to_string_lossy()
-                    .into_owned(),
             }
         } else {
             match shell {
                 Shell::Bash => r" \w ".into(),
                 Shell::Zsh => " %d ".into(),
-                Shell::Bare => {
-                    let Ok(Some(home)) = homedir::my_home() else {
-                        log::error!("failed to get home directory");
-                        return None;
-                    };
-
-                    if cwd.starts_with(&home) {
-                        format!(" ~/{} ", cwd.strip_prefix(home).unwrap().to_string_lossy())
-                    } else {
-                        cwd.to_string_lossy().into_owned()
-                    }
-                }
             }
         };
 
