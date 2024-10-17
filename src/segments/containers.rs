@@ -2,7 +2,6 @@ use std::time::Duration;
 use ureq::{Agent, Config, Timeouts};
 
 use crate::configuration::ContainersConfiguration;
-use crate::fonts;
 use crate::segments::{Segment, SegmentGenerator};
 use crate::shell::Shell;
 use crate::theme::{BackgroundColor, ForegroundColor, Theme};
@@ -91,32 +90,20 @@ impl<'a> SegmentGenerator for ContainersSegment<'a> {
             return None;
         }
 
-        let mut text = format!(" {} ", fonts::NerdFonts::MD_DOCKER);
+        let mut text = " 󰡨 ".to_owned();
         {
             use std::fmt::Write;
             if running > 0 {
-                write!(text, " {} {}", fonts::NerdFonts::BLACK_CIRCLE, running).unwrap();
+                write!(text, " ● {}", running).unwrap();
             }
             if paused > 0 {
-                write!(text, " {} {}", fonts::NerdFonts::TILDE, paused).unwrap();
+                write!(text, " ~ {}", paused).unwrap();
             }
             if exited > 0 {
-                write!(
-                    text,
-                    " {} {}",
-                    fonts::NerdFonts::HEAVY_MULTIPLICATION_X,
-                    exited
-                )
-                .unwrap();
+                write!(text, " ✖ {}", exited).unwrap();
             }
             if restarting > 0 {
-                write!(
-                    text,
-                    " {} {}",
-                    fonts::NerdFonts::CLOCKWISE_OPEN_CIRCLE_ARROW,
-                    restarting
-                )
-                .unwrap();
+                write!(text, " ↻ {}", restarting).unwrap();
             }
             text.push(' ');
         }

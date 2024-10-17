@@ -9,7 +9,6 @@ use shell::Shell;
 use theme::Theme;
 
 mod configuration;
-mod fonts;
 mod powerline;
 mod segments;
 mod shell;

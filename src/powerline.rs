@@ -1,4 +1,3 @@
-use crate::fonts;
 use crate::segments::SegmentGenerator;
 use crate::shell::Shell;
 use crate::theme::{Blink, ForegroundColor, Reset, Theme};
@@ -45,17 +44,15 @@ impl<'a> Powerline<'a> {
 
             match segments.get(i + 1).map(|o| o.bg) {
                 Some(next_bg) => print!(
-                    r"{}{}{}{}",
+                    r"{}{}{}",
                     ForegroundColor::from(output.bg).fmt(self.shell),
                     next_bg.fmt(self.shell),
-                    fonts::NerdFonts::LEFT_HARD_DIVIDER,
                     Reset.fmt(self.shell)
                 ),
                 // last triangle: don't set background color
                 None => print!(
-                    r"{}{}{} ",
+                    r"{}{} ",
                     ForegroundColor::from(output.bg).fmt(self.shell),
-                    fonts::NerdFonts::LEFT_HARD_DIVIDER,
                     Reset.fmt(self.shell)
                 ),
             };

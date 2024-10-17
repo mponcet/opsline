@@ -1,4 +1,3 @@
-use crate::fonts::NerdFonts;
 use crate::segments::{Segment, SegmentGenerator};
 use crate::theme::Theme;
 use crate::theme::{BackgroundColor, ForegroundColor};
@@ -50,12 +49,7 @@ impl SegmentGenerator for GitSegment {
         };
 
         let mut segments = Vec::from([Segment {
-            text: format!(
-                " {} {} ",
-                NerdFonts::PL_BRANCH,
-                branch_name.unwrap_or("git error".into())
-            )
-            .into(),
+            text: format!("  {} ", branch_name.unwrap_or("git error".into())).into(),
             bg,
             fg,
             blinking: false,
@@ -70,7 +64,7 @@ impl SegmentGenerator for GitSegment {
                     };
 
                     segments.push(Segment {
-                        text: format!(" {}{} ", ahead, NerdFonts::UPWARDS_BLACK_ARROW).into(),
+                        text: format!(" {}⬆ ", ahead).into(),
                         bg,
                         fg,
                         blinking: false,
@@ -83,7 +77,7 @@ impl SegmentGenerator for GitSegment {
                     };
 
                     segments.push(Segment {
-                        text: format!(" {}{} ", behind, NerdFonts::DOWNWARDS_BLACK_ARROW).into(),
+                        text: format!(" {}⬇ ", behind).into(),
                         bg,
                         fg,
                         blinking: false,
@@ -131,7 +125,7 @@ impl SegmentGenerator for GitSegment {
             };
 
             segments.push(Segment {
-                text: format!(" {}{} ", staged, NerdFonts::HEAVY_CHECK_MARK).into(),
+                text: format!(" {}✔ ", staged).into(),
                 bg,
                 fg,
                 blinking: false,
@@ -145,7 +139,7 @@ impl SegmentGenerator for GitSegment {
             };
 
             segments.push(Segment {
-                text: format!(" {}{} ", modified, NerdFonts::LOWER_RIGHT_PENCIL).into(),
+                text: format!(" {}✎ ", modified).into(),
                 bg,
                 fg,
                 blinking: false,
@@ -159,7 +153,7 @@ impl SegmentGenerator for GitSegment {
             };
 
             segments.push(Segment {
-                text: format!(" {}{} ", untracked, NerdFonts::FULLWIDTH_PLUS_SIGN).into(),
+                text: format!(" {}+ ", untracked).into(),
                 bg,
                 fg,
                 blinking: false,
@@ -173,12 +167,7 @@ impl SegmentGenerator for GitSegment {
             };
 
             segments.push(Segment {
-                text: format!(
-                    " {}{} ",
-                    conflicted,
-                    NerdFonts::OPEN_CENTRE_TEARDROP_SPOKED_ASTERISK
-                )
-                .into(),
+                text: format!(" {}✼ ", conflicted).into(),
                 bg,
                 fg,
                 blinking: false,
