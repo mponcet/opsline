@@ -1,6 +1,5 @@
 use std::os::raw::c_char;
 
-use crate::fonts;
 use crate::segments::{Segment, SegmentGenerator};
 use crate::shell::Shell;
 use crate::theme::Theme;
@@ -25,7 +24,7 @@ impl SegmentGenerator for ReadonlySegment {
 
         if readonly {
             Some(Vec::from([Segment {
-                text: format!(" {} ", fonts::NerdFonts::FA_LOCK),
+                text: "  ".into(),
                 bg,
                 fg,
                 blinking: false,

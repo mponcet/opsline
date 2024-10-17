@@ -1,4 +1,3 @@
-use crate::fonts;
 use crate::segments::{Segment, SegmentGenerator};
 use crate::shell::Shell;
 use crate::theme::{BackgroundColor, ForegroundColor, Theme};
@@ -20,7 +19,7 @@ impl SegmentGenerator for SshSegment {
 
         if std::env::var("SSH_CLIENT").is_ok() {
             Some(Vec::from([Segment {
-                text: format!(" {} ", fonts::NerdFonts::MD_SSH),
+                text: " 󰣀 ".into(),
                 bg,
                 fg,
                 blinking: false,

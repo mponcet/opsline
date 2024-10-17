@@ -1,3 +1,5 @@
+use std::borrow::Cow;
+
 use crate::theme::{BackgroundColor, ForegroundColor, Theme};
 use crate::Shell;
 
@@ -18,7 +20,7 @@ pub use root::RootSegment;
 pub use ssh::SshSegment;
 
 pub struct Segment {
-    pub text: String,
+    pub text: Cow<'static, str>,
     pub bg: BackgroundColor,
     pub fg: ForegroundColor,
     pub blinking: bool,

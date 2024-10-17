@@ -14,8 +14,8 @@ impl RootSegment {
 impl SegmentGenerator for RootSegment {
     fn output(&self, shell: Shell, theme: Theme) -> Option<Vec<Segment>> {
         let text = match shell {
-            Shell::Bash => r" \$ ".into(),
-            Shell::Zsh => " %# ".into(),
+            Shell::Bash => r" \$ ",
+            Shell::Zsh => " %# ",
         };
 
         let (bg, fg) = match theme {
@@ -24,7 +24,7 @@ impl SegmentGenerator for RootSegment {
         };
 
         Some(Vec::from([Segment {
-            text,
+            text: text.into(),
             bg,
             fg,
             blinking: false,

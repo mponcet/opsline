@@ -1,7 +1,6 @@
 use kube::config::Kubeconfig;
 
 use crate::configuration::KubeConfiguration;
-use crate::fonts;
 use crate::segments::{Segment, SegmentGenerator};
 use crate::theme::{BackgroundColor, ForegroundColor, Theme};
 use crate::Shell;
@@ -33,7 +32,7 @@ impl<'a> SegmentGenerator for KubeSegment<'a> {
         };
 
         segments.push(Segment {
-            text: format!(" {}", fonts::NerdFonts::SHIP_WHEEL),
+            text: " ⎈ ".into(),
             bg,
             fg,
             blinking: false,
@@ -47,7 +46,7 @@ impl<'a> SegmentGenerator for KubeSegment<'a> {
                 .any(|c| current_context.contains(c))
         }) {
             segments.push(Segment {
-                text: format!(r"{}", fonts::NerdFonts::FA_WARNING),
+                text: "".into(),
                 fg: ForegroundColor(196),
                 bg,
                 blinking: true,
@@ -67,7 +66,8 @@ impl<'a> SegmentGenerator for KubeSegment<'a> {
                 alias
                     .map(|a| a.alias.as_str())
                     .unwrap_or(current_context.as_str())
-            ),
+            )
+            .into(),
             fg,
             bg,
             blinking: false,
@@ -79,7 +79,7 @@ impl<'a> SegmentGenerator for KubeSegment<'a> {
                 Theme::Gruvbox => (BackgroundColor(236), ForegroundColor(229)),
             };
             segments.push(Segment {
-                text: format!(" {} ", namespace),
+                text: format!(" {} ", namespace).into(),
                 bg,
                 fg,
                 blinking: false,

@@ -54,7 +54,8 @@ impl SegmentGenerator for GitSegment {
                 " {} {} ",
                 NerdFonts::PL_BRANCH,
                 branch_name.unwrap_or("git error".into())
-            ),
+            )
+            .into(),
             bg,
             fg,
             blinking: false,
@@ -69,7 +70,7 @@ impl SegmentGenerator for GitSegment {
                     };
 
                     segments.push(Segment {
-                        text: format!(" {}{} ", ahead, NerdFonts::UPWARDS_BLACK_ARROW),
+                        text: format!(" {}{} ", ahead, NerdFonts::UPWARDS_BLACK_ARROW).into(),
                         bg,
                         fg,
                         blinking: false,
@@ -82,7 +83,7 @@ impl SegmentGenerator for GitSegment {
                     };
 
                     segments.push(Segment {
-                        text: format!(" {}{} ", behind, NerdFonts::DOWNWARDS_BLACK_ARROW),
+                        text: format!(" {}{} ", behind, NerdFonts::DOWNWARDS_BLACK_ARROW).into(),
                         bg,
                         fg,
                         blinking: false,
@@ -130,7 +131,7 @@ impl SegmentGenerator for GitSegment {
             };
 
             segments.push(Segment {
-                text: format!(" {}{} ", staged, NerdFonts::HEAVY_CHECK_MARK),
+                text: format!(" {}{} ", staged, NerdFonts::HEAVY_CHECK_MARK).into(),
                 bg,
                 fg,
                 blinking: false,
@@ -144,7 +145,7 @@ impl SegmentGenerator for GitSegment {
             };
 
             segments.push(Segment {
-                text: format!(" {}{} ", modified, NerdFonts::LOWER_RIGHT_PENCIL),
+                text: format!(" {}{} ", modified, NerdFonts::LOWER_RIGHT_PENCIL).into(),
                 bg,
                 fg,
                 blinking: false,
@@ -158,7 +159,7 @@ impl SegmentGenerator for GitSegment {
             };
 
             segments.push(Segment {
-                text: format!(" {}{} ", untracked, NerdFonts::FULLWIDTH_PLUS_SIGN),
+                text: format!(" {}{} ", untracked, NerdFonts::FULLWIDTH_PLUS_SIGN).into(),
                 bg,
                 fg,
                 blinking: false,
@@ -176,7 +177,8 @@ impl SegmentGenerator for GitSegment {
                     " {}{} ",
                     conflicted,
                     NerdFonts::OPEN_CENTRE_TEARDROP_SPOKED_ASTERISK
-                ),
+                )
+                .into(),
                 bg,
                 fg,
                 blinking: false,

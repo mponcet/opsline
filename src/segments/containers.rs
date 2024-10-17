@@ -122,7 +122,7 @@ impl<'a> SegmentGenerator for ContainersSegment<'a> {
         }
 
         Some(Vec::from([Segment {
-            text,
+            text: text.into(),
             bg,
             fg,
             blinking: false,

@@ -18,13 +18,13 @@ impl<'a> SegmentGenerator for CwdSegment<'a> {
     fn output(&self, shell: Shell, theme: Theme) -> Option<Vec<Segment>> {
         let text = if self.config.dironly {
             match shell {
-                Shell::Bash => r" \W ".into(),
-                Shell::Zsh => " %1d ".into(),
+                Shell::Bash => r" \W ",
+                Shell::Zsh => " %1d ",
             }
         } else {
             match shell {
-                Shell::Bash => r" \w ".into(),
-                Shell::Zsh => " %d ".into(),
+                Shell::Bash => r" \w ",
+                Shell::Zsh => " %d ",
             }
         };
 
@@ -34,7 +34,7 @@ impl<'a> SegmentGenerator for CwdSegment<'a> {
         };
 
         Some(Vec::from([Segment {
-            text,
+            text: text.into(),
             bg,
             fg,
             blinking: false,
