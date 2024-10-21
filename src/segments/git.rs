@@ -49,7 +49,7 @@ impl SegmentGenerator for GitSegment {
         };
 
         let mut segments = Vec::from([Segment {
-            text: format!("  {} ", branch_name.unwrap_or("git error".into())).into(),
+            text: format!("  {} ", branch_name?).into(),
             bg,
             fg,
             blinking: false,
