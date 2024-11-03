@@ -1,6 +1,5 @@
 use crate::segments::{Segment, SegmentGenerator};
 use crate::theme::Theme;
-use crate::theme::{BackgroundColor, ForegroundColor};
 use crate::Shell;
 use git2::{BranchType, Repository};
 
@@ -13,7 +12,7 @@ impl GitSegment {
 }
 
 impl SegmentGenerator for GitSegment {
-    fn output(&self, _shell: Shell, theme: Theme) -> Option<Vec<Segment>> {
+    fn output(&self, _shell: Shell, theme: &Theme) -> Option<Vec<Segment>> {
         let repo = Repository::discover(".").ok()?;
         log::info!("repository found at {}", repo.path().to_string_lossy());
 
@@ -43,43 +42,28 @@ impl SegmentGenerator for GitSegment {
             }
         }
 
-        let (bg, fg) = match theme {
-            Theme::Default => (BackgroundColor(148), ForegroundColor(0)),
-            Theme::Gruvbox => (BackgroundColor(100), ForegroundColor(237)),
-        };
-
         let mut segments = Vec::from([Segment {
             text: format!("  {} ", branch_name?).into(),
-            bg,
-            fg,
+            bg: theme.git_branch_bg,
+            fg: theme.git_branch_fg,
             blinking: false,
         }]);
 
         if let (Some(local), Some(upstream)) = (local, upstream) {
             if let Ok((ahead, behind)) = repo.graph_ahead_behind(local, upstream) {
                 if ahead > 0 {
-                    let (bg, fg) = match theme {
-                        Theme::Default => (BackgroundColor(240), ForegroundColor(250)),
-                        Theme::Gruvbox => (BackgroundColor(239), ForegroundColor(248)),
-                    };
-
                     segments.push(Segment {
                         text: format!(" {}⬆ ", ahead).into(),
-                        bg,
-                        fg,
+                        bg: theme.git_ahead_bg,
+                        fg: theme.git_ahead_fg,
                         blinking: false,
                     });
                 }
                 if behind > 0 {
-                    let (bg, fg) = match theme {
-                        Theme::Default => (BackgroundColor(240), ForegroundColor(250)),
-                        Theme::Gruvbox => (BackgroundColor(239), ForegroundColor(248)),
-                    };
-
                     segments.push(Segment {
                         text: format!(" {}⬇ ", behind).into(),
-                        bg,
-                        fg,
+                        bg: theme.git_behind_bg,
+                        fg: theme.git_behind_fg,
                         blinking: false,
                     });
                 }
@@ -119,57 +103,37 @@ impl SegmentGenerator for GitSegment {
         }
 
         if staged > 0 {
-            let (bg, fg) = match theme {
-                Theme::Default => (BackgroundColor(22), ForegroundColor(15)),
-                Theme::Gruvbox => (BackgroundColor(106), ForegroundColor(229)),
-            };
-
             segments.push(Segment {
                 text: format!(" {}✔ ", staged).into(),
-                bg,
-                fg,
+                bg: theme.git_staged_bg,
+                fg: theme.git_staged_fg,
                 blinking: false,
             });
         }
 
         if modified > 0 {
-            let (bg, fg) = match theme {
-                Theme::Default => (BackgroundColor(130), ForegroundColor(15)),
-                Theme::Gruvbox => (BackgroundColor(166), ForegroundColor(229)),
-            };
-
             segments.push(Segment {
                 text: format!(" {}✎ ", modified).into(),
-                bg,
-                fg,
+                bg: theme.git_modified_bg,
+                fg: theme.git_modified_fg,
                 blinking: false,
             });
         }
 
         if untracked > 0 {
-            let (bg, fg) = match theme {
-                Theme::Default => (BackgroundColor(52), ForegroundColor(15)),
-                Theme::Gruvbox => (BackgroundColor(88), ForegroundColor(229)),
-            };
-
             segments.push(Segment {
                 text: format!(" {}+ ", untracked).into(),
-                bg,
-                fg,
+                bg: theme.git_untracked_bg,
+                fg: theme.git_untracked_fg,
                 blinking: false,
             });
         }
 
         if conflicted > 0 {
-            let (bg, fg) = match theme {
-                Theme::Default => (BackgroundColor(9), ForegroundColor(15)),
-                Theme::Gruvbox => (BackgroundColor(124), ForegroundColor(229)),
-            };
-
             segments.push(Segment {
                 text: format!(" {}✼ ", conflicted).into(),
-                bg,
-                fg,
+                bg: theme.git_conflicted_bg,
+                fg: theme.git_conflicted_fg,
                 blinking: false,
             });
         }

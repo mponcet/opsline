@@ -4,7 +4,7 @@ use ureq::{Agent, Config, Timeouts};
 use crate::configuration::ContainersConfiguration;
 use crate::segments::{Segment, SegmentGenerator};
 use crate::shell::Shell;
-use crate::theme::{BackgroundColor, ForegroundColor, Theme};
+use crate::theme::Theme;
 use crate::utils::ureq_unix::{FakeResolver, UnixConnector};
 
 const REQUEST_TIMEOUT_MS: u64 = 500;
@@ -66,14 +66,9 @@ fn list_containers<T: AsRef<str>>(url: T, timeout: Option<Duration>) -> Option<V
 }
 
 impl<'a> SegmentGenerator for ContainersSegment<'a> {
-    fn output(&self, _shell: Shell, theme: Theme) -> Option<Vec<Segment>> {
+    fn output(&self, _shell: Shell, theme: &Theme) -> Option<Vec<Segment>> {
         let url = &self.config.as_ref()?.url;
         let containers = list_containers(url, Some(Duration::from_millis(REQUEST_TIMEOUT_MS)))?;
-
-        let (bg, fg) = match theme {
-            Theme::Default => (BackgroundColor(55), ForegroundColor(177)),
-            Theme::Gruvbox => (BackgroundColor(96), ForegroundColor(229)),
-        };
 
         // status=(created, restarting, running, removing, paused, exited or dead)
         let (mut running, mut paused, mut exited, mut restarting) = (0, 0, 0, 0);
@@ -110,8 +105,8 @@ impl<'a> SegmentGenerator for ContainersSegment<'a> {
 
         Some(Vec::from([Segment {
             text: text.into(),
-            bg,
-            fg,
+            bg: theme.container_bg,
+            fg: theme.container_fg,
             blinking: false,
         }]))
     }

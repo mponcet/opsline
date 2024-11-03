@@ -2,7 +2,7 @@ use kube::config::Kubeconfig;
 
 use crate::configuration::KubeConfiguration;
 use crate::segments::{Segment, SegmentGenerator};
-use crate::theme::{BackgroundColor, ForegroundColor, Theme};
+use crate::theme::{ForegroundColor, Theme};
 use crate::Shell;
 
 pub struct KubeSegment<'a> {
@@ -16,7 +16,7 @@ impl<'a> KubeSegment<'a> {
 }
 
 impl<'a> SegmentGenerator for KubeSegment<'a> {
-    fn output(&self, _shell: Shell, theme: Theme) -> Option<Vec<Segment>> {
+    fn output(&self, _shell: Shell, theme: &Theme) -> Option<Vec<Segment>> {
         let config = Kubeconfig::read().ok()?;
         let current_context = config.current_context?;
         let context = config
@@ -26,15 +26,10 @@ impl<'a> SegmentGenerator for KubeSegment<'a> {
             .map(|c| c.context.as_ref())??;
         let mut segments = Vec::new();
 
-        let (bg, fg) = match theme {
-            Theme::Default => (BackgroundColor(26), ForegroundColor(117)),
-            Theme::Gruvbox => (BackgroundColor(235), ForegroundColor(229)),
-        };
-
         segments.push(Segment {
             text: " ⎈ ".into(),
-            bg,
-            fg,
+            bg: theme.kube_context_bg,
+            fg: theme.kube_context_fg,
             blinking: false,
         });
 
@@ -47,8 +42,8 @@ impl<'a> SegmentGenerator for KubeSegment<'a> {
         }) {
             segments.push(Segment {
                 text: "".into(),
+                bg: theme.kube_context_bg,
                 fg: ForegroundColor(196),
-                bg,
                 blinking: true,
             })
         }
@@ -68,20 +63,16 @@ impl<'a> SegmentGenerator for KubeSegment<'a> {
                     .unwrap_or(current_context.as_str())
             )
             .into(),
-            fg,
-            bg,
+            bg: theme.kube_context_bg,
+            fg: theme.kube_context_fg,
             blinking: false,
         });
 
         if let Some(ref namespace) = context.namespace {
-            let (bg, fg) = match theme {
-                Theme::Default => (BackgroundColor(17), ForegroundColor(170)),
-                Theme::Gruvbox => (BackgroundColor(236), ForegroundColor(229)),
-            };
             segments.push(Segment {
                 text: format!(" {} ", namespace).into(),
-                bg,
-                fg,
+                bg: theme.kube_namespace_bg,
+                fg: theme.kube_namespace_fg,
                 blinking: false,
             })
         }

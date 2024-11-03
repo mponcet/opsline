@@ -27,5 +27,5 @@ pub struct Segment {
 }
 
 pub trait SegmentGenerator {
-    fn output(&self, shell: Shell, theme: Theme) -> Option<Vec<Segment>>;
+    fn output(&self, shell: Shell, theme: &Theme) -> Option<Vec<Segment>>;
 }

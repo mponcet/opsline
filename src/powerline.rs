@@ -25,7 +25,7 @@ impl<'a> Powerline<'a> {
         let segments: Vec<_> = self
             .segments
             .iter()
-            .filter_map(|s| s.output(self.shell, self.theme))
+            .filter_map(|s| s.output(self.shell, &self.theme))
             .flatten()
             .collect();
 

@@ -5,18 +5,6 @@ use crate::shell::Shell;
 #[derive(Clone, Copy)]
 pub struct BackgroundColor(pub u8);
 
-#[allow(unused)]
-impl BackgroundColor {
-    pub const BLACK: Self = Self(40);
-    pub const RED: Self = Self(41);
-    pub const GREEN: Self = Self(42);
-    pub const YELLOW: Self = Self(43);
-    pub const BLUE: Self = Self(44);
-    pub const PURPLE: Self = Self(45);
-    pub const CYAN: Self = Self(46);
-    pub const WHITE: Self = Self(47);
-}
-
 impl fmt::Display for BackgroundColor {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, "{}", self.0)
@@ -41,18 +29,6 @@ impl BackgroundColor {
 
 #[derive(Clone, Copy)]
 pub struct ForegroundColor(pub u8);
-
-#[allow(unused)]
-impl ForegroundColor {
-    pub const BLACK: Self = Self(30);
-    pub const RED: Self = Self(31);
-    pub const GREEN: Self = Self(32);
-    pub const YELLOW: Self = Self(33);
-    pub const BLUE: Self = Self(34);
-    pub const PURPLE: Self = Self(35);
-    pub const CYAN: Self = Self(36);
-    pub const WHITE: Self = Self(37);
-}
 
 impl From<BackgroundColor> for ForegroundColor {
     fn from(bg: BackgroundColor) -> Self {
@@ -120,19 +96,47 @@ impl Reset {
     }
 }
 
-#[derive(Clone, Copy)]
-pub enum Theme {
-    Default,
-    Gruvbox,
+pub struct Theme {
+    pub container_bg: BackgroundColor,
+    pub container_fg: ForegroundColor,
+    pub cwd_bg: BackgroundColor,
+    pub cwd_fg: ForegroundColor,
+    pub git_branch_bg: BackgroundColor,
+    pub git_branch_fg: ForegroundColor,
+    pub git_ahead_bg: BackgroundColor,
+    pub git_ahead_fg: ForegroundColor,
+    pub git_behind_bg: BackgroundColor,
+    pub git_behind_fg: ForegroundColor,
+    pub git_modified_bg: BackgroundColor,
+    pub git_modified_fg: ForegroundColor,
+    pub git_staged_bg: BackgroundColor,
+    pub git_staged_fg: ForegroundColor,
+    pub git_untracked_bg: BackgroundColor,
+    pub git_untracked_fg: ForegroundColor,
+    pub git_conflicted_bg: BackgroundColor,
+    pub git_conflicted_fg: ForegroundColor,
+    pub kube_context_bg: BackgroundColor,
+    pub kube_context_fg: ForegroundColor,
+    pub kube_namespace_bg: BackgroundColor,
+    pub kube_namespace_fg: ForegroundColor,
+    pub readonly_bg: BackgroundColor,
+    pub readonly_fg: ForegroundColor,
+    pub root_bg: BackgroundColor,
+    pub root_fg: ForegroundColor,
+    pub ssh_bg: BackgroundColor,
+    pub ssh_fg: ForegroundColor,
 }
+
+mod default;
+mod gruvbox;
 
 impl TryFrom<&str> for Theme {
     type Error = Box<dyn std::error::Error>;
 
     fn try_from(value: &str) -> Result<Self, Self::Error> {
         match value {
-            "default" => Ok(Theme::Default),
-            "gruvbox" => Ok(Theme::Gruvbox),
+            "default" => Ok(default::DEFAULT),
+            "gruvbox" => Ok(gruvbox::GRUVBOX),
             _ => Err("unknown theme".into()),
         }
     }
