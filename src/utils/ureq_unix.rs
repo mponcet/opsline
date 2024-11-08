@@ -3,10 +3,10 @@ use std::io::{self, Read, Write};
 use std::os::unix::net::UnixStream;
 use std::path::{Path, PathBuf};
 
+use ureq::config::Config;
 use ureq::http::Uri;
 use ureq::resolver::{ResolvedSocketAddrs, Resolver};
 use ureq::transport::{Buffers, ConnectionDetails, Connector, LazyBuffers, NextTimeout, Transport};
-use ureq::Config;
 
 #[derive(Debug)]
 pub struct UnixConnector {
@@ -127,7 +127,7 @@ impl Resolver for FakeResolver {
         _config: &Config,
         _timeout: NextTimeout,
     ) -> Result<ResolvedSocketAddrs, ureq::Error> {
-        Ok(ResolvedSocketAddrs::new())
+        Ok(ArrayVec::new())
     }
 }
 
@@ -135,7 +135,6 @@ impl Resolver for FakeResolver {
 mod tests {
     use super::*;
     use std::time::Duration;
-    use ureq::Timeouts;
 
     #[test]
     fn test_podman_unix_socket() {
@@ -156,13 +155,9 @@ mod tests {
     #[test]
     #[should_panic]
     fn test_podman_unix_socket_timeout() {
-        let config = Config {
-            timeouts: Timeouts {
-                global: Some(Duration::from_millis(1)),
-                ..Default::default()
-            },
-            ..Default::default()
-        };
+        let config = ureq::Agent::config_builder()
+            .timeout_global(Some(Duration::from_millis(1)))
+            .build();
         let resolver = FakeResolver;
         let connector = UnixConnector::new(format!("/run/user/{}/podman/podman.sock", unsafe {
             libc::getuid()
