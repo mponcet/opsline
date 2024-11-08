@@ -27,12 +27,18 @@ pub struct ContainersConfiguration {
 }
 
 #[derive(Debug, Deserialize, Serialize)]
+pub struct TerraformConfiguration {
+    pub critical_workspaces: Vec<String>,
+}
+
+#[derive(Debug, Deserialize, Serialize)]
 pub struct Configuration {
     pub segments: Vec<String>,
     pub theme: String,
     pub cwd: CwdConfiguration,
     pub kube: Option<KubeConfiguration>,
     pub containers: Option<ContainersConfiguration>,
+    pub terraform: Option<TerraformConfiguration>,
 }
 
 impl Default for Configuration {
@@ -43,6 +49,7 @@ impl Default for Configuration {
             cwd: CwdConfiguration::default(),
             kube: None,
             containers: None,
+            terraform: None,
         }
     }
 }

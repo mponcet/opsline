@@ -3,7 +3,7 @@ use clap::{command, Arg};
 use powerline::Powerline;
 use segments::{
     ContainersSegment, CwdSegment, GitSegment, KubeSegment, ReadonlySegment, RootSegment,
-    SegmentGenerator, SshSegment,
+    SegmentGenerator, SshSegment, TerraformSegment,
 };
 use shell::Shell;
 use theme::Theme;
@@ -56,6 +56,7 @@ fn main() {
             "containers" => {
                 powerline.add_segment(ContainersSegment::new(config.containers.as_ref()))
             }
+            "terraform" => powerline.add_segment(TerraformSegment::new(config.terraform.as_ref())),
             s => panic!("unknown segment name: {}", s),
         }
     }

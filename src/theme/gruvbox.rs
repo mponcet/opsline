@@ -29,4 +29,6 @@ pub const GRUVBOX: Theme = Theme {
     root_fg: ForegroundColor(246),
     ssh_bg: BackgroundColor(96),
     ssh_fg: ForegroundColor(229),
+    terraform_bg: BackgroundColor(129),
+    terraform_fg: ForegroundColor(15),
 };

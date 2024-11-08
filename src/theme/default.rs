@@ -29,4 +29,6 @@ pub const DEFAULT: Theme = Theme {
     root_fg: ForegroundColor(15),
     ssh_bg: BackgroundColor(166),
     ssh_fg: ForegroundColor(254),
+    terraform_bg: BackgroundColor(26),
+    terraform_fg: ForegroundColor(15),
 };
