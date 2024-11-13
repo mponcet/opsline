@@ -139,6 +139,10 @@ mod tests {
 
     #[test]
     fn test_podman_unix_socket() {
+        std::process::Command::new("systemctl")
+            .args(["start", "--user", "podman.socket"])
+            .output()
+            .expect("failed to start podman socket");
         let config = Config::default();
         let resolver = FakeResolver;
         let connector = UnixConnector::new(format!("/run/user/{}/podman/podman.sock", unsafe {
