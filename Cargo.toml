@@ -12,5 +12,5 @@ homedir = "0.3.4"
 kube = { version = "0.96.0", features = ["config"] }
 libc = "0.2.162"
 log = "0.4.22"
-serde = { version = "1.0.214", features = ["derive"] }
+serde = { version = "1.0.215", features = ["derive"] }
 ureq = { version = "=3.0.0-rc1", features = ["json"] }
