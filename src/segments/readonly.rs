@@ -1,5 +1,3 @@
-use std::os::raw::c_char;
-
 use crate::segments::{Segment, SegmentGenerator};
 use crate::shell::Shell;
 use crate::theme::Theme;
@@ -14,7 +12,7 @@ impl ReadonlySegment {
 
 impl SegmentGenerator for ReadonlySegment {
     fn output(&self, _shell: Shell, theme: &Theme) -> Option<Vec<Segment>> {
-        let readonly = unsafe { libc::access(".\0".as_ptr() as *const c_char, libc::W_OK) } != 0;
+        let readonly = unsafe { libc::access(c".".as_ptr(), libc::W_OK) } != 0;
 
         if readonly {
             Some(Vec::from([Segment {

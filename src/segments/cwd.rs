@@ -13,7 +13,7 @@ impl<'a> CwdSegment<'a> {
     }
 }
 
-impl<'a> SegmentGenerator for CwdSegment<'a> {
+impl SegmentGenerator for CwdSegment<'_> {
     fn output(&self, shell: Shell, theme: &Theme) -> Option<Vec<Segment>> {
         let text = if self.config.dironly {
             match shell {
