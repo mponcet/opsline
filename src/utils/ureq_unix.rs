@@ -1,12 +1,15 @@
 use std::fmt::Debug;
 use std::io::{self, Read, Write};
+use std::net::{IpAddr, Ipv4Addr, SocketAddr};
 use std::os::unix::net::UnixStream;
 use std::path::{Path, PathBuf};
 
+use ureq::config::Config;
 use ureq::http::Uri;
-use ureq::resolver::{ResolvedSocketAddrs, Resolver};
-use ureq::transport::{Buffers, ConnectionDetails, Connector, LazyBuffers, NextTimeout, Transport};
-use ureq::Config;
+use ureq::unversioned::resolver::{ArrayVec, ResolvedSocketAddrs, Resolver};
+use ureq::unversioned::transport::{
+    Buffers, ConnectionDetails, Connector, LazyBuffers, NextTimeout, Transport,
+};
 
 #[derive(Debug)]
 pub struct UnixConnector {
@@ -22,10 +25,12 @@ impl UnixConnector {
 }
 
 impl Connector for UnixConnector {
+    type Out = Box<dyn Transport>;
+
     fn connect(
         &self,
         details: &ConnectionDetails,
-        chained: Option<Box<dyn Transport>>,
+        chained: Option<()>,
     ) -> Result<Option<Box<dyn Transport>>, ureq::Error> {
         if chained.is_some() {
             // do something ?
@@ -37,7 +42,7 @@ impl Connector for UnixConnector {
             ureq::Error::Io(e)
         })?;
 
-        let buffers = LazyBuffers::new(config.input_buffer_size, config.output_buffer_size);
+        let buffers = LazyBuffers::new(config.input_buffer_size(), config.output_buffer_size());
         let transport = UnixStreamTransport::new(stream, buffers);
 
         Ok(Some(Box::new(transport)))
@@ -127,7 +132,11 @@ impl Resolver for FakeResolver {
         _config: &Config,
         _timeout: NextTimeout,
     ) -> Result<ResolvedSocketAddrs, ureq::Error> {
-        Ok(ResolvedSocketAddrs::new())
+        fn localhost_socketaddr() -> SocketAddr {
+            SocketAddr::new(IpAddr::V4(Ipv4Addr::new(127, 0, 0, 1)), 0)
+        }
+
+        Ok(ArrayVec::from_fn(|_| localhost_socketaddr()))
     }
 }
 
@@ -135,7 +144,7 @@ impl Resolver for FakeResolver {
 mod tests {
     use super::*;
     use std::time::Duration;
-    use ureq::Timeouts;
+    use ureq::Agent;
 
     #[test]
     fn test_podman_unix_socket() {
@@ -160,13 +169,9 @@ mod tests {
     #[test]
     #[should_panic]
     fn test_podman_unix_socket_timeout() {
-        let config = Config {
-            timeouts: Timeouts {
-                global: Some(Duration::from_millis(1)),
-                ..Default::default()
-            },
-            ..Default::default()
-        };
+        let config = Agent::config_builder()
+            .timeout_global(Some(Duration::from_millis(1)))
+            .build();
         let resolver = FakeResolver;
         let connector = UnixConnector::new(format!("/run/user/{}/podman/podman.sock", unsafe {
             libc::getuid()

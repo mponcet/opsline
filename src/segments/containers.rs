@@ -1,5 +1,6 @@
 use std::time::Duration;
-use ureq::{Agent, Config, Timeouts};
+use ureq::config::Config;
+use ureq::Agent;
 
 use crate::configuration::ContainersConfiguration;
 use crate::segments::{Segment, SegmentGenerator};
@@ -30,13 +31,7 @@ fn list_containers<T: AsRef<str>>(url: T, timeout: Option<Duration>) -> Option<V
     log::info!("listing containers at {}", url);
 
     let config = if timeout.is_some() {
-        Config {
-            timeouts: Timeouts {
-                global: timeout,
-                ..Default::default()
-            },
-            ..Default::default()
-        }
+        Agent::config_builder().timeout_global(timeout).build()
     } else {
         Config::default()
     };
@@ -65,7 +60,7 @@ fn list_containers<T: AsRef<str>>(url: T, timeout: Option<Duration>) -> Option<V
         .ok()
 }
 
-impl<'a> SegmentGenerator for ContainersSegment<'a> {
+impl SegmentGenerator for ContainersSegment<'_> {
     fn output(&self, _shell: Shell, theme: &Theme) -> Option<Vec<Segment>> {
         let url = &self.config.as_ref()?.url;
         let containers = list_containers(url, Some(Duration::from_millis(REQUEST_TIMEOUT_MS)))?;
