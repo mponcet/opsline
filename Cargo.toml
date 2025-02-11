@@ -11,6 +11,6 @@ git2 = { version = "0.20.0", default-features = false }
 homedir = "0.3.4"
 kube = { version = "0.98.0", features = ["config"] }
 libc = "0.2.169"
-log = "0.4.22"
+log = "0.4.25"
 serde = { version = "1.0.217", features = ["derive"] }
 ureq = { version = "3.0.3", features = ["json"] }
