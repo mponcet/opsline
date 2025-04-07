@@ -5,7 +5,7 @@ edition = "2021"
 
 [dependencies]
 clap = { version = "4.5.23", features = ["cargo"] }
-env_logger = "0.11.6"
+env_logger = "0.11.8"
 figment = { version = "0.10.19", features = ["yaml"] }
 git2 = { version = "0.20.0", default-features = false }
 homedir = "0.3.4"
