@@ -159,10 +159,10 @@ mod tests {
         }));
         let agent = ureq::Agent::with_parts(config, connector, resolver);
 
-        let url = "http://d/_ping";
-        match agent.get(url).call() {
-            Ok(mut result) => assert_eq!(result.body_mut().read_to_string().unwrap(), "OK"),
-            Err(_) => panic!("failed to get {}", url),
+        let response = agent.get("http://d/_ping").call();
+        match response {
+            Ok(mut response) => assert_eq!(response.body_mut().read_to_string().unwrap(), "OK"),
+            Err(_) => panic!("failed to ping podman"),
         }
     }
 
@@ -178,10 +178,10 @@ mod tests {
         }));
         let agent = ureq::Agent::with_parts(config, connector, resolver);
 
-        let url = "http://d/_ping";
-        match agent.get(url).call() {
-            Ok(mut result) => assert_eq!(result.body_mut().read_to_string().unwrap(), "OK"),
-            Err(_) => panic!("failed to get {}", url),
+        let response = agent.get("http://d/_ping").call();
+        match response {
+            Ok(mut response) => assert_eq!(response.body_mut().read_to_string().unwrap(), "OK"),
+            Err(_) => panic!("failed to ping podman"),
         }
     }
 }

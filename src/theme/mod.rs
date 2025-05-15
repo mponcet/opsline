@@ -12,7 +12,7 @@ impl fmt::Display for BackgroundColor {
 }
 
 impl BackgroundColor {
-    pub fn fmt(&self, shell: Shell) -> impl fmt::Display {
+    pub fn fmt(&self, shell: Shell) -> impl fmt::Display + use<> {
         struct Helper(BackgroundColor, Shell);
         impl fmt::Display for Helper {
             fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
@@ -43,7 +43,7 @@ impl fmt::Display for ForegroundColor {
 }
 
 impl ForegroundColor {
-    pub fn fmt(&self, shell: Shell) -> impl fmt::Display {
+    pub fn fmt(&self, shell: Shell) -> impl fmt::Display + use<> {
         struct Helper(ForegroundColor, Shell);
         impl fmt::Display for Helper {
             fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
@@ -62,7 +62,7 @@ impl ForegroundColor {
 pub struct Blink;
 
 impl Blink {
-    pub fn fmt(&self, shell: Shell) -> impl fmt::Display {
+    pub fn fmt(&self, shell: Shell) -> impl fmt::Display + use<> {
         struct Helper(Blink, Shell);
         impl fmt::Display for Helper {
             fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
@@ -81,7 +81,7 @@ impl Blink {
 pub struct Reset;
 
 impl Reset {
-    pub fn fmt(&self, shell: Shell) -> impl fmt::Display {
+    pub fn fmt(&self, shell: Shell) -> impl fmt::Display + use<> {
         struct Helper(Reset, Shell);
         impl fmt::Display for Helper {
             fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {

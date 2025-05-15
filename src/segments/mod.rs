@@ -1,7 +1,7 @@
 use std::borrow::Cow;
 
-use crate::theme::{BackgroundColor, ForegroundColor, Theme};
 use crate::Shell;
+use crate::theme::{BackgroundColor, ForegroundColor, Theme};
 
 pub mod containers;
 pub mod cwd;

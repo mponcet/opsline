@@ -1,6 +1,6 @@
 use std::time::Duration;
-use ureq::config::Config;
 use ureq::Agent;
+use ureq::config::Config;
 
 use crate::configuration::ContainersConfiguration;
 use crate::segments::{Segment, SegmentGenerator};

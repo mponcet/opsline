@@ -1,9 +1,9 @@
 use kube::config::Kubeconfig;
 
+use crate::Shell;
 use crate::configuration::KubeConfiguration;
 use crate::segments::{Segment, SegmentGenerator};
 use crate::theme::{ForegroundColor, Theme};
-use crate::Shell;
 
 pub struct KubeSegment<'a> {
     config: Option<&'a KubeConfiguration>,

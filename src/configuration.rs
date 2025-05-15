@@ -1,6 +1,6 @@
 use figment::{
-    providers::{Format, Serialized, Yaml},
     Figment,
+    providers::{Format, Serialized, Yaml},
 };
 use serde::{Deserialize, Serialize};
 

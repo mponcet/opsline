@@ -1,4 +1,4 @@
-use clap::{command, Arg};
+use clap::{Arg, command};
 
 use powerline::Powerline;
 use segments::{

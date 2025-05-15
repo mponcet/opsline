@@ -1,7 +1,7 @@
+use crate::Shell;
 use crate::configuration::CwdConfiguration;
 use crate::segments::{Segment, SegmentGenerator};
 use crate::theme::Theme;
-use crate::Shell;
 
 pub struct CwdSegment<'a> {
     config: &'a CwdConfiguration,

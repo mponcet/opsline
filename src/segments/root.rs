@@ -1,6 +1,6 @@
 use crate::Shell;
 use crate::Theme;
-use crate::{segments::Segment, SegmentGenerator};
+use crate::{SegmentGenerator, segments::Segment};
 
 pub struct RootSegment;
 
