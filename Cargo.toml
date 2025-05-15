@@ -10,7 +10,7 @@ figment = { version = "0.10.19", features = ["yaml"] }
 git2 = { version = "0.20.2", default-features = false }
 homedir = "0.3.4"
 kube = { version = "0.99.0", features = ["config"] }
-libc = "0.2.170"
+libc = "0.2.172"
 log = "0.4.22"
 serde = { version = "1.0.218", features = ["derive"] }
 ureq = { version = "3.0.8", features = ["json"] }
