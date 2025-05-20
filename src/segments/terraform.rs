@@ -27,7 +27,7 @@ impl SegmentGenerator for TerraformSegment<'_> {
 
         if self
             .config
-            .is_some_and(|c| c.critical_workspaces.iter().any(|w| *w == workspace))
+            .is_some_and(|c| c.critical_workspaces.contains(&workspace))
         {
             segments.push(Segment {
                 text: "".into(),

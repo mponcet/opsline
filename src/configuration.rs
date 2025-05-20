@@ -55,9 +55,10 @@ impl Default for Configuration {
 }
 
 impl Configuration {
-    pub fn try_from_file(path: &str) -> Result<Configuration, figment::Error> {
+    pub fn try_from_file(path: &str) -> Result<Configuration, Box<figment::Error>> {
         Figment::from(Serialized::defaults(Configuration::default()))
             .merge(Yaml::file(path))
             .extract()
+            .map_err(Box::new)
     }
 }

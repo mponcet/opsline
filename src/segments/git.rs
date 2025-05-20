@@ -33,17 +33,12 @@ impl SegmentGenerator for GitSegment {
             if let Ok(Some(name)) = branch.name() {
                 branch_name = Some(name.to_owned());
             }
-        } else {
-            match repo.head() {
-                Ok(head) => {
-                    // detached state
-                    if let Some(oid) = head.target() {
-                        let mut oid = oid.to_string();
-                        oid.truncate(7);
-                        branch_name = Some(oid);
-                    }
-                }
-                _ => {}
+        } else if let Ok(head) = repo.head() {
+            // detached state
+            if let Some(oid) = head.target() {
+                let mut oid = oid.to_string();
+                oid.truncate(7);
+                branch_name = Some(oid);
             }
         }
 
