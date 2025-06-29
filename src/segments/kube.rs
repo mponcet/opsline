@@ -33,13 +33,12 @@ impl SegmentGenerator for KubeSegment<'_> {
             blinking: false,
         });
 
-        if self.config.is_some_and(|c| {
-            c.critical_contexts
-                .as_deref()
-                .unwrap_or_default()
+        if let Some(config) = self.config
+            && let Some(critical_contexts) = &config.critical_contexts
+            && critical_contexts
                 .iter()
                 .any(|c| current_context.contains(c))
-        }) {
+        {
             segments.push(Segment {
                 text: "".into(),
                 bg: theme.kube_context_bg,

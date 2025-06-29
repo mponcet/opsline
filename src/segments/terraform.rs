@@ -25,9 +25,8 @@ impl SegmentGenerator for TerraformSegment<'_> {
             blinking: false,
         });
 
-        if self
-            .config
-            .is_some_and(|c| c.critical_workspaces.contains(&workspace))
+        if let Some(config) = self.config
+            && config.critical_workspaces.contains(&workspace)
         {
             segments.push(Segment {
                 text: "".into(),
