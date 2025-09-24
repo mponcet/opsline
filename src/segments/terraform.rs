@@ -19,6 +19,7 @@ impl SegmentGenerator for TerraformSegment<'_> {
         let mut segments = Vec::new();
 
         segments.push(Segment {
+            name: "terraform",
             text: " 󱁢 ".into(),
             bg: theme.terraform_bg,
             fg: theme.terraform_fg,
@@ -29,6 +30,7 @@ impl SegmentGenerator for TerraformSegment<'_> {
             && config.critical_workspaces.contains(&workspace)
         {
             segments.push(Segment {
+                name: "terraform",
                 text: "".into(),
                 bg: theme.terraform_bg,
                 fg: ForegroundColor(196),
@@ -37,6 +39,7 @@ impl SegmentGenerator for TerraformSegment<'_> {
         }
 
         segments.push(Segment {
+            name: "terraform",
             text: format!("{workspace} ").into(),
             bg: theme.terraform_bg,
             fg: theme.terraform_fg,

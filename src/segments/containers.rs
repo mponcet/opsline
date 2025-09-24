@@ -99,6 +99,7 @@ impl SegmentGenerator for ContainersSegment<'_> {
         }
 
         Some(Vec::from([Segment {
+            name: "containers",
             text: text.into(),
             bg: theme.container_bg,
             fg: theme.container_fg,

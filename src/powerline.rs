@@ -29,21 +29,20 @@ impl<'a> Powerline<'a> {
             .flatten()
             .collect();
 
-        for (i, output) in segments.iter().enumerate() {
-            if output.blinking {
+        for (i, segment) in segments.iter().enumerate() {
+            if segment.blinking {
                 print!("{}", Blink.fmt(self.shell));
             }
 
-            // special case: newline
-            if output.text == "\n" {
-                print!(r"{}{}", output.text, Reset.fmt(self.shell));
+            if segment.name == "newline" {
+                print!(r"{}{}", segment.text, Reset.fmt(self.shell));
                 continue;
             } else {
                 print!(
                     r"{}{}{}{}",
-                    output.fg.fmt(self.shell),
-                    output.bg.fmt(self.shell),
-                    output.text,
+                    segment.fg.fmt(self.shell),
+                    segment.bg.fmt(self.shell),
+                    segment.text,
                     Reset.fmt(self.shell)
                 );
             }
@@ -51,14 +50,14 @@ impl<'a> Powerline<'a> {
             match segments.get(i + 1) {
                 Some(next_segment) => print!(
                     r"{}{}{}",
-                    ForegroundColor::from(output.bg).fmt(self.shell),
+                    ForegroundColor::from(segment.bg).fmt(self.shell),
                     next_segment.bg.fmt(self.shell),
                     Reset.fmt(self.shell)
                 ),
                 // last triangle: don't set background color
                 None => print!(
                     r"{}{} ",
-                    ForegroundColor::from(output.bg).fmt(self.shell),
+                    ForegroundColor::from(segment.bg).fmt(self.shell),
                     Reset.fmt(self.shell)
                 ),
             };

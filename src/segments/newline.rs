@@ -13,6 +13,7 @@ impl NewLineSegment {
 impl SegmentGenerator for NewLineSegment {
     fn output(&self, _shell: Shell, _theme: &Theme) -> Option<Vec<Segment>> {
         Some(Vec::from([Segment {
+            name: "newline",
             text: "\n".into(),
             // not needed
             bg: crate::theme::BackgroundColor(0),

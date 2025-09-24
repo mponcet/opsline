@@ -18,6 +18,7 @@ impl SegmentGenerator for RootSegment {
         };
 
         Some(Vec::from([Segment {
+            name: "root",
             text: text.into(),
             bg: theme.root_bg,
             fg: theme.root_fg,

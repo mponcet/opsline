@@ -24,6 +24,7 @@ pub use ssh::SshSegment;
 pub use terraform::TerraformSegment;
 
 pub struct Segment {
+    pub name: &'static str,
     pub text: Cow<'static, str>,
     pub bg: BackgroundColor,
     pub fg: ForegroundColor,

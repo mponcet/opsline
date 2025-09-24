@@ -43,6 +43,7 @@ impl SegmentGenerator for GitSegment {
         }
 
         let mut segments = Vec::from([Segment {
+            name: "git",
             text: format!("  {} ", branch_name?).into(),
             bg: theme.git_branch_bg,
             fg: theme.git_branch_fg,
@@ -50,24 +51,27 @@ impl SegmentGenerator for GitSegment {
         }]);
 
         if let (Some(local), Some(upstream)) = (local, upstream)
-            && let Ok((ahead, behind)) = repo.graph_ahead_behind(local, upstream) {
-                if ahead > 0 {
-                    segments.push(Segment {
-                        text: format!(" {}⬆ ", ahead).into(),
-                        bg: theme.git_ahead_bg,
-                        fg: theme.git_ahead_fg,
-                        blinking: false,
-                    });
-                }
-                if behind > 0 {
-                    segments.push(Segment {
-                        text: format!(" {}⬇ ", behind).into(),
-                        bg: theme.git_behind_bg,
-                        fg: theme.git_behind_fg,
-                        blinking: false,
-                    });
-                }
+            && let Ok((ahead, behind)) = repo.graph_ahead_behind(local, upstream)
+        {
+            if ahead > 0 {
+                segments.push(Segment {
+                    name: "git",
+                    text: format!(" {}⬆ ", ahead).into(),
+                    bg: theme.git_ahead_bg,
+                    fg: theme.git_ahead_fg,
+                    blinking: false,
+                });
             }
+            if behind > 0 {
+                segments.push(Segment {
+                    name: "git",
+                    text: format!(" {}⬇ ", behind).into(),
+                    bg: theme.git_behind_bg,
+                    fg: theme.git_behind_fg,
+                    blinking: false,
+                });
+            }
+        }
 
         let mut modified = 0;
         let mut staged = 0;
@@ -103,6 +107,7 @@ impl SegmentGenerator for GitSegment {
 
         if staged > 0 {
             segments.push(Segment {
+                name: "git",
                 text: format!(" {}✔ ", staged).into(),
                 bg: theme.git_staged_bg,
                 fg: theme.git_staged_fg,
@@ -112,6 +117,7 @@ impl SegmentGenerator for GitSegment {
 
         if modified > 0 {
             segments.push(Segment {
+                name: "git",
                 text: format!(" {}✎ ", modified).into(),
                 bg: theme.git_modified_bg,
                 fg: theme.git_modified_fg,
@@ -121,6 +127,7 @@ impl SegmentGenerator for GitSegment {
 
         if untracked > 0 {
             segments.push(Segment {
+                name: "git",
                 text: format!(" {}+ ", untracked).into(),
                 bg: theme.git_untracked_bg,
                 fg: theme.git_untracked_fg,
@@ -130,6 +137,7 @@ impl SegmentGenerator for GitSegment {
 
         if conflicted > 0 {
             segments.push(Segment {
+                name: "git",
                 text: format!(" {}✼ ", conflicted).into(),
                 bg: theme.git_conflicted_bg,
                 fg: theme.git_conflicted_fg,

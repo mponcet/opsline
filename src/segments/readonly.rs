@@ -16,6 +16,7 @@ impl SegmentGenerator for ReadonlySegment {
 
         if readonly {
             Some(Vec::from([Segment {
+                name: "readonly",
                 text: "  ".into(),
                 bg: theme.readonly_bg,
                 fg: theme.readonly_fg,

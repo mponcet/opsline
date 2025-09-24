@@ -27,6 +27,7 @@ impl SegmentGenerator for KubeSegment<'_> {
         let mut segments = Vec::new();
 
         segments.push(Segment {
+            name: "kube",
             text: " ⎈ ".into(),
             bg: theme.kube_context_bg,
             fg: theme.kube_context_fg,
@@ -40,6 +41,7 @@ impl SegmentGenerator for KubeSegment<'_> {
                 .any(|c| current_context.contains(c))
         {
             segments.push(Segment {
+                name: "kube",
                 text: "".into(),
                 bg: theme.kube_context_bg,
                 fg: ForegroundColor(196),
@@ -55,6 +57,7 @@ impl SegmentGenerator for KubeSegment<'_> {
                 .find(|ka| ka.context == current_context)
         });
         segments.push(Segment {
+            name: "kube",
             text: format!(
                 "{} ",
                 alias
@@ -69,6 +72,7 @@ impl SegmentGenerator for KubeSegment<'_> {
 
         if let Some(ref namespace) = context.namespace {
             segments.push(Segment {
+                name: "kube",
                 text: format!(" {} ", namespace).into(),
                 bg: theme.kube_namespace_bg,
                 fg: theme.kube_namespace_fg,

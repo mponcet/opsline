@@ -28,6 +28,7 @@ impl SegmentGenerator for CwdSegment<'_> {
         };
 
         Some(Vec::from([Segment {
+            name: "cwd",
             text: text.into(),
             bg: theme.cwd_bg,
             fg: theme.cwd_fg,

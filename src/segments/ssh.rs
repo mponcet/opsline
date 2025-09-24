@@ -14,6 +14,7 @@ impl SegmentGenerator for SshSegment {
     fn output(&self, _shell: Shell, theme: &Theme) -> Option<Vec<super::Segment>> {
         if std::env::var("SSH_CLIENT").is_ok() {
             Some(Vec::from([Segment {
+                name: "ssh",
                 text: " 󰣀 ".into(),
                 bg: theme.ssh_bg,
                 fg: theme.ssh_fg,
