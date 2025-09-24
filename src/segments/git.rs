@@ -49,8 +49,8 @@ impl SegmentGenerator for GitSegment {
             blinking: false,
         }]);
 
-        if let (Some(local), Some(upstream)) = (local, upstream) {
-            if let Ok((ahead, behind)) = repo.graph_ahead_behind(local, upstream) {
+        if let (Some(local), Some(upstream)) = (local, upstream)
+            && let Ok((ahead, behind)) = repo.graph_ahead_behind(local, upstream) {
                 if ahead > 0 {
                     segments.push(Segment {
                         text: format!(" {}⬆ ", ahead).into(),
@@ -68,7 +68,6 @@ impl SegmentGenerator for GitSegment {
                     });
                 }
             }
-        }
 
         let mut modified = 0;
         let mut staged = 0;
