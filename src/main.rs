@@ -2,8 +2,8 @@ use clap::{Arg, command};
 
 use powerline::Powerline;
 use segments::{
-    ContainersSegment, CwdSegment, GitSegment, KubeSegment, ReadonlySegment, RootSegment,
-    SegmentGenerator, SshSegment, TerraformSegment,
+    ContainersSegment, CwdSegment, GitSegment, KubeSegment, NewLineSegment, ReadonlySegment,
+    RootSegment, SegmentGenerator, SshSegment, TerraformSegment,
 };
 use shell::Shell;
 use theme::Theme;
@@ -51,6 +51,7 @@ fn main() {
             "root" => powerline.add_segment(RootSegment::new()),
             "kube" => powerline.add_segment(KubeSegment::new(config.kube.as_ref())),
             "git" => powerline.add_segment(GitSegment::new()),
+            "newline" => powerline.add_segment(NewLineSegment::new()),
             "ssh" => powerline.add_segment(SshSegment::new()),
             "readonly" => powerline.add_segment(ReadonlySegment::new()),
             "containers" => {

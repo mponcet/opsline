@@ -34,19 +34,25 @@ impl<'a> Powerline<'a> {
                 print!("{}", Blink.fmt(self.shell));
             }
 
-            print!(
-                r"{}{}{}{}",
-                output.fg.fmt(self.shell),
-                output.bg.fmt(self.shell),
-                output.text,
-                Reset.fmt(self.shell)
-            );
+            // special case: newline
+            if output.text == "\n" {
+                print!(r"{}{}", output.text, Reset.fmt(self.shell));
+                continue;
+            } else {
+                print!(
+                    r"{}{}{}{}",
+                    output.fg.fmt(self.shell),
+                    output.bg.fmt(self.shell),
+                    output.text,
+                    Reset.fmt(self.shell)
+                );
+            }
 
-            match segments.get(i + 1).map(|o| o.bg) {
-                Some(next_bg) => print!(
+            match segments.get(i + 1) {
+                Some(next_segment) => print!(
                     r"{}{}{}",
                     ForegroundColor::from(output.bg).fmt(self.shell),
-                    next_bg.fmt(self.shell),
+                    next_segment.bg.fmt(self.shell),
                     Reset.fmt(self.shell)
                 ),
                 // last triangle: don't set background color
