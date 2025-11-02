@@ -11,5 +11,5 @@ git2 = { version = "0.20.2", default-features = false, features = ["vendored-lib
 kube = { version = "2.0.1", features = ["config"] }
 libc = "0.2.175"
 log = "0.4.22"
-serde = { version = "1.0.226", features = ["derive"] }
+serde = { version = "1.0.228", features = ["derive"] }
 ureq = { version = "3.1.0", features = ["json"] }
