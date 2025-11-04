@@ -48,14 +48,14 @@ impl<'a> Powerline<'a> {
             }
 
             match segments.get(i + 1) {
-                Some(next_segment) => print!(
+                Some(next_segment) if next_segment.name != "newline" => print!(
                     r"{}{}{}",
                     ForegroundColor::from(segment.bg).fmt(self.shell),
                     next_segment.bg.fmt(self.shell),
                     Reset.fmt(self.shell)
                 ),
-                // last triangle: don't set background color
-                None => print!(
+                // last triangle on the line : don't set background color
+                _ => print!(
                     r"{}{} ",
                     ForegroundColor::from(segment.bg).fmt(self.shell),
                     Reset.fmt(self.shell)
