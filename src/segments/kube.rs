@@ -44,7 +44,7 @@ impl SegmentGenerator for KubeSegment<'_> {
                 name: "kube",
                 text: "".into(),
                 bg: theme.kube_context_bg,
-                fg: ForegroundColor(196),
+                fg: ForegroundColor::from_color_code(196),
                 blinking: true,
             })
         }

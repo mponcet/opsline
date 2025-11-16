@@ -3,11 +3,25 @@ use std::fmt;
 use crate::shell::Shell;
 
 #[derive(Clone, Copy)]
-pub struct BackgroundColor(pub u8);
+pub struct BackgroundColor(Option<u8>);
+
+impl BackgroundColor {
+    pub const fn from_color_code(color_code: u8) -> Self {
+        Self(Some(color_code))
+    }
+
+    pub const fn colorless() -> Self {
+        Self(None)
+    }
+}
 
 impl fmt::Display for BackgroundColor {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "{}", self.0)
+        if let Some(bg) = self.0 {
+            write!(f, "{}", bg)
+        } else {
+            write!(f, "")
+        }
     }
 }
 
@@ -28,7 +42,17 @@ impl BackgroundColor {
 }
 
 #[derive(Clone, Copy)]
-pub struct ForegroundColor(pub u8);
+pub struct ForegroundColor(Option<u8>);
+
+impl ForegroundColor {
+    pub const fn from_color_code(color_code: u8) -> Self {
+        Self(Some(color_code))
+    }
+
+    pub const fn colorless() -> Self {
+        Self(None)
+    }
+}
 
 impl From<BackgroundColor> for ForegroundColor {
     fn from(bg: BackgroundColor) -> Self {
@@ -38,7 +62,11 @@ impl From<BackgroundColor> for ForegroundColor {
 
 impl fmt::Display for ForegroundColor {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "{}", self.0)
+        if let Some(fg) = self.0 {
+            write!(f, "{}", fg)
+        } else {
+            write!(f, "")
+        }
     }
 }
 

@@ -33,7 +33,7 @@ impl SegmentGenerator for TerraformSegment<'_> {
                 name: "terraform",
                 text: "".into(),
                 bg: theme.terraform_bg,
-                fg: ForegroundColor(196),
+                fg: ForegroundColor::from_color_code(196),
                 blinking: true,
             });
         }

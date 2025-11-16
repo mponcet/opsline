@@ -15,10 +15,8 @@ impl SegmentGenerator for NewLineSegment {
         Some(Vec::from([Segment {
             name: "newline",
             text: "\n".into(),
-            // not needed
-            bg: crate::theme::BackgroundColor(0),
-            // not needed
-            fg: crate::theme::ForegroundColor(0),
+            bg: crate::theme::BackgroundColor::colorless(),
+            fg: crate::theme::ForegroundColor::colorless(),
             blinking: false,
         }]))
     }

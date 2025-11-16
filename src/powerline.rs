@@ -34,17 +34,15 @@ impl<'a> Powerline<'a> {
                 print!("{}", Blink.fmt(self.shell));
             }
 
+            print!(
+                r"{}{}{}{}",
+                segment.fg.fmt(self.shell),
+                segment.bg.fmt(self.shell),
+                segment.text,
+                Reset.fmt(self.shell)
+            );
             if segment.name == "newline" {
-                print!(r"{}{}", segment.text, Reset.fmt(self.shell));
                 continue;
-            } else {
-                print!(
-                    r"{}{}{}{}",
-                    segment.fg.fmt(self.shell),
-                    segment.bg.fmt(self.shell),
-                    segment.text,
-                    Reset.fmt(self.shell)
-                );
             }
 
             match segments.get(i + 1) {
