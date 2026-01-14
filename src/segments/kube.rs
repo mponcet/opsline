@@ -73,7 +73,7 @@ impl SegmentGenerator for KubeSegment<'_> {
         if let Some(ref namespace) = context.namespace {
             segments.push(Segment {
                 name: "kube",
-                text: format!(" {} ", namespace).into(),
+                text: format!("{} ", namespace).into(),
                 bg: theme.kube_namespace_bg,
                 fg: theme.kube_namespace_fg,
                 blinking: false,

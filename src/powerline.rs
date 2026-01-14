@@ -1,6 +1,6 @@
 use crate::segments::SegmentGenerator;
 use crate::shell::Shell;
-use crate::theme::{Blink, ForegroundColor, Reset, Theme};
+use crate::theme::{Blink, Reset, Theme};
 
 pub struct Powerline<'a> {
     shell: Shell,
@@ -34,30 +34,31 @@ impl<'a> Powerline<'a> {
                 print!("{}", Blink.fmt(self.shell));
             }
 
-            print!(
-                r"{}{}{}{}",
-                segment.fg.fmt(self.shell),
-                segment.bg.fmt(self.shell),
-                segment.text,
-                Reset.fmt(self.shell)
-            );
+            print!(r"{}{}", segment.fg.fmt(self.shell), segment.text);
+
             if segment.name == "newline" {
+                print!("{}", Reset.fmt(self.shell));
                 continue;
             }
 
             match segments.get(i + 1) {
-                Some(next_segment) if next_segment.name != "newline" => print!(
-                    r"{}{}{}",
-                    ForegroundColor::from(segment.bg).fmt(self.shell),
-                    next_segment.bg.fmt(self.shell),
-                    Reset.fmt(self.shell)
-                ),
-                // last triangle on the line : don't set background color
-                _ => print!(
-                    r"{}{} ",
-                    ForegroundColor::from(segment.bg).fmt(self.shell),
-                    Reset.fmt(self.shell)
-                ),
+                Some(next_segment) if next_segment.name != "newline" => {
+                    if next_segment.name != segment.name {
+                        print!(
+                            r"{}{}",
+                            Reset.fmt(self.shell),
+                            next_segment.fg.fmt(self.shell)
+                        );
+                    } else {
+                        print!(
+                            r"{}{}",
+                            Reset.fmt(self.shell),
+                            next_segment.fg.fmt(self.shell)
+                        );
+                    }
+                }
+                // last segment on the line
+                _ => print!(r"{}{} ", Reset.fmt(self.shell), Reset.fmt(self.shell)),
             };
         }
     }

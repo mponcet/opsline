@@ -6,6 +6,7 @@ use crate::shell::Shell;
 pub struct BackgroundColor(Option<u8>);
 
 impl BackgroundColor {
+    #[allow(dead_code)]
     pub const fn from_color_code(color_code: u8) -> Self {
         Self(Some(color_code))
     }
@@ -26,6 +27,7 @@ impl fmt::Display for BackgroundColor {
 }
 
 impl BackgroundColor {
+    #[allow(dead_code)]
     pub fn fmt(&self, shell: Shell) -> impl fmt::Display {
         struct Helper(BackgroundColor, Shell);
         impl fmt::Display for Helper {

@@ -84,16 +84,16 @@ impl SegmentGenerator for ContainersSegment<'_> {
         {
             use std::fmt::Write;
             if running > 0 {
-                write!(text, " ● {}", running).unwrap();
+                write!(text, "● {} ", running).unwrap();
             }
             if paused > 0 {
-                write!(text, " ~ {}", paused).unwrap();
+                write!(text, "~ {} ", paused).unwrap();
             }
             if exited > 0 {
-                write!(text, " ✖ {}", exited).unwrap();
+                write!(text, "✖ {} ", exited).unwrap();
             }
             if restarting > 0 {
-                write!(text, " ↻ {}", restarting).unwrap();
+                write!(text, "↻ {} ", restarting).unwrap();
             }
             text.push(' ');
         }

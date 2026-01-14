@@ -26,6 +26,7 @@ pub use terraform::TerraformSegment;
 pub struct Segment {
     pub name: &'static str,
     pub text: Cow<'static, str>,
+    #[allow(dead_code)]
     pub bg: BackgroundColor,
     pub fg: ForegroundColor,
     pub blinking: bool,

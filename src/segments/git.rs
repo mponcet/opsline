@@ -56,7 +56,7 @@ impl SegmentGenerator for GitSegment {
             if ahead > 0 {
                 segments.push(Segment {
                     name: "git",
-                    text: format!(" {}⬆ ", ahead).into(),
+                    text: format!("{}⬆ ", ahead).into(),
                     bg: theme.git_ahead_bg,
                     fg: theme.git_ahead_fg,
                     blinking: false,
@@ -65,7 +65,7 @@ impl SegmentGenerator for GitSegment {
             if behind > 0 {
                 segments.push(Segment {
                     name: "git",
-                    text: format!(" {}⬇ ", behind).into(),
+                    text: format!("{}⬇ ", behind).into(),
                     bg: theme.git_behind_bg,
                     fg: theme.git_behind_fg,
                     blinking: false,
@@ -108,7 +108,7 @@ impl SegmentGenerator for GitSegment {
         if staged > 0 {
             segments.push(Segment {
                 name: "git",
-                text: format!(" {}✔ ", staged).into(),
+                text: format!("{}✔ ", staged).into(),
                 bg: theme.git_staged_bg,
                 fg: theme.git_staged_fg,
                 blinking: false,
@@ -118,7 +118,7 @@ impl SegmentGenerator for GitSegment {
         if modified > 0 {
             segments.push(Segment {
                 name: "git",
-                text: format!(" {}✎ ", modified).into(),
+                text: format!("{}✎ ", modified).into(),
                 bg: theme.git_modified_bg,
                 fg: theme.git_modified_fg,
                 blinking: false,
@@ -128,7 +128,7 @@ impl SegmentGenerator for GitSegment {
         if untracked > 0 {
             segments.push(Segment {
                 name: "git",
-                text: format!(" {}+ ", untracked).into(),
+                text: format!("{}+ ", untracked).into(),
                 bg: theme.git_untracked_bg,
                 fg: theme.git_untracked_fg,
                 blinking: false,
@@ -138,7 +138,7 @@ impl SegmentGenerator for GitSegment {
         if conflicted > 0 {
             segments.push(Segment {
                 name: "git",
-                text: format!(" {}✼ ", conflicted).into(),
+                text: format!("{}✼ ", conflicted).into(),
                 bg: theme.git_conflicted_bg,
                 fg: theme.git_conflicted_fg,
                 blinking: false,
