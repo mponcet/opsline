@@ -4,12 +4,11 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
-clap = { version = "4.5.53", features = ["derive", "cargo"] }
+clap = { version = "4.5.54", features = ["derive", "cargo"] }
 env_logger = "0.11.8"
-figment = { version = "0.10.19", features = ["yaml"] }
-git2 = { version = "0.20.2", default-features = false, features = ["vendored-libgit2"] }
-kube = { version = "2.0.1", features = ["config"] }
-libc = "0.2.177"
-log = "0.4.28"
+git2 = { version = "0.20.3", default-features = false, features = ["vendored-libgit2"] }
+kube = { version = "3.0.0", features = ["config"] }
+libc = "0.2.180"
+log = "0.4.29"
 serde = { version = "1.0.228", features = ["derive"] }
 ureq = { version = "3.1.4", features = ["json"] }
