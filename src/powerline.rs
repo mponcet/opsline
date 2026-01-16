@@ -58,7 +58,7 @@ impl<'a> Powerline<'a> {
                     }
                 }
                 // last segment on the line
-                _ => print!(r"{}{} ", Reset.fmt(self.shell), Reset.fmt(self.shell)),
+                _ => print!(r"{}{}", Reset.fmt(self.shell), Reset.fmt(self.shell)),
             };
         }
     }
