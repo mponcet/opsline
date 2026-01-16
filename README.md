@@ -20,7 +20,7 @@ Add the following to your `.bashrc` :
 
 ```
 function _update_ps1() {
-    PS1="$(opsline --shell bash --config ~/.config/opsline/opsline.yaml)"
+    PS1="$(opsline --shell bash --theme gruvbox --segments cwd,git,root)"
 }
 
 if [ "$TERM" != "linux" ] && command -v opsline 2>&1 >/dev/null; then
@@ -34,7 +34,7 @@ Add the following to your `.zshrc` :
 
 ```
 function _update_ps1() {
-    PS1="$(opsline --shell zsh --config ~/.config/opsline/opsline.yaml)"
+    PS1="$(opsline --shell zsh --theme gruvbox --segments cwd,git,root)"
 }
 
 if [ "$TERM" != "linux" ] && command -v opsline 2>&1 >/dev/null; then
@@ -44,27 +44,51 @@ fi
 
 ## Configuration
 
+Opsline now command-line arguments. Here are the available options:
+
+```bash
+Usage: opsline [OPTIONS] --shell <SHELL>
+
+Options:
+      --shell <SHELL>
+          [possible values: bash, zsh]
+      --theme <THEME>
+          [default: default] [possible values: default, gruvbox]
+      --segments <SEGMENTS>
+          [default: cwd,root]
+      --cwd-dironly
+
+      --kube-critical-contexts <KUBE_CRITICAL_CONTEXTS>
+
+      --kube-context-aliases <KUBE_CONTEXT_ALIASES>
+
+      --containers-url <CONTAINERS_URL>
+
+      --terraform-critical-workspaces <TERRAFORM_CRITICAL_WORKSPACES>
+
+  -h, --help
+          Print help
+  -V, --version
+          Print version
+```
+
 ### Example
 
+```bash
+opsline --shell bash --theme gruvbox --segments cwd,git,root --cwd-dironly
 ```
-theme: gruvbox
-segments:
-  - cwd
-  - readonly
-  - git
-  - kube
-  - containers
-  - root
-cwd:
-  dironly: true
-kube:
-  critical_contexts:
-    - kind-prod
-  context_aliases:
-    - context: kind-prod
-      alias: prod
-containers:
-  url: unix:/run/user/1000/podman/podman.sock
+
+### Advanced Example
+
+```bash
+opsline --shell bash \
+  --theme gruvbox \
+  --segments cwd,readonly,git,kube,containers,root \
+  --cwd-dironly \
+  --kube-critical-contexts k8s-prod \
+  --kube-context-aliases "k8s-prod:prod,minikube:dev" \
+  --containers-url "unix:/run/user/1000/podman/podman.sock" \
+  --terraform-critical-workspaces prod
 ```
 
 ## Documentation

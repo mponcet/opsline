@@ -1,7 +1,3 @@
-use figment::{
-    Figment,
-    providers::{Format, Serialized, Yaml},
-};
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Default, Deserialize, Serialize)]
@@ -51,14 +47,5 @@ impl Default for Configuration {
             containers: None,
             terraform: None,
         }
-    }
-}
-
-impl Configuration {
-    pub fn try_from_file(path: &str) -> Result<Configuration, Box<figment::Error>> {
-        Figment::from(Serialized::defaults(Configuration::default()))
-            .merge(Yaml::file(path))
-            .extract()
-            .map_err(Box::new)
     }
 }
