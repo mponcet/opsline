@@ -7,7 +7,7 @@ edition = "2024"
 clap = { version = "4.5.54", features = ["derive", "cargo"] }
 env_logger = "0.11.8"
 git2 = { version = "0.20.3", default-features = false, features = ["vendored-libgit2"] }
-kube = { version = "3.0.0", features = ["config"] }
+kube = { version = "3.0.1", features = ["config"] }
 libc = "0.2.180"
 log = "0.4.29"
 serde = { version = "1.0.228", features = ["derive"] }
