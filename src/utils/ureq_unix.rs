@@ -4,6 +4,7 @@ use std::net::{IpAddr, Ipv4Addr, SocketAddr};
 use std::os::unix::net::UnixStream;
 use std::path::{Path, PathBuf};
 
+use tracing::error;
 use ureq::config::Config;
 use ureq::http::Uri;
 use ureq::unversioned::resolver::{ArrayVec, ResolvedSocketAddrs, Resolver};
@@ -38,7 +39,7 @@ impl Connector for UnixConnector {
 
         let config = details.config;
         let stream = UnixStream::connect(self.path.as_path()).map_err(|e| {
-            log::error!("connection failed: {}", e);
+            error!("connection failed: {}", e);
             ureq::Error::Io(e)
         })?;
 
@@ -77,7 +78,7 @@ impl Transport for UnixStreamTransport {
         let output = &self.buffers.output()[..amount];
         self.stream.set_write_timeout(Some(*timeout.after))?;
         self.stream.write_all(output).map_err(|e| {
-            log::error!("{:?}", e);
+            error!("{:?}", e);
             e
         })?;
 
@@ -92,7 +93,7 @@ impl Transport for UnixStreamTransport {
         let input = self.buffers.input_append_buf();
         self.stream.set_read_timeout(Some(*timeout.after))?;
         let amount = self.stream.read(input).map_err(|e| {
-            log::error!("{:?}", e);
+            error!("{:?}", e);
             e
         })?;
         self.buffers.input_appended(amount);

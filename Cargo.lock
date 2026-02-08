@@ -977,7 +977,6 @@ dependencies = [
  "git2",
  "kube",
  "libc",
- "log",
  "serde",
  "tracing",
  "tracing-subscriber",

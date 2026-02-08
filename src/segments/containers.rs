@@ -1,4 +1,5 @@
 use std::time::Duration;
+use tracing::{error, info};
 use ureq::Agent;
 use ureq::config::Config;
 
@@ -28,7 +29,7 @@ struct Container {
 
 fn list_containers<T: AsRef<str>>(url: T, timeout: Option<Duration>) -> Option<Vec<Container>> {
     let url = url.as_ref();
-    log::info!("listing containers at {}", url);
+    info!("listing containers at {}", url);
 
     let config = if timeout.is_some() {
         Agent::config_builder().timeout_global(timeout).build()
@@ -49,13 +50,13 @@ fn list_containers<T: AsRef<str>>(url: T, timeout: Option<Duration>) -> Option<V
     request
         .call()
         .map_err(|_| {
-            log::error!("http request failed");
+            error!("http request failed");
         })
         .ok()?
         .body_mut()
         .read_json::<Vec<Container>>()
         .map_err(|_| {
-            log::error!("body deserialization failed");
+            error!("body deserialization failed");
         })
         .ok()
 }

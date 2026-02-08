@@ -2,6 +2,7 @@ use crate::Shell;
 use crate::segments::{Segment, SegmentGenerator};
 use crate::theme::Theme;
 use git2::{BranchType, Repository};
+use tracing::{error, info};
 
 pub struct GitSegment;
 
@@ -18,7 +19,7 @@ impl SegmentGenerator for GitSegment {
 
     fn output(&self, _shell: Shell, theme: &Theme) -> Option<Vec<Segment>> {
         let repo = Repository::discover(".").ok()?;
-        log::info!("repository found at {}", repo.path().to_string_lossy());
+        info!("repository found at {}", repo.path().to_string_lossy());
 
         let current_branch =
             repo.branches(Some(BranchType::Local))
@@ -105,7 +106,7 @@ impl SegmentGenerator for GitSegment {
                 }
             }
             Err(_) => {
-                log::error!("failed to get git repository status");
+                error!("failed to get git repository status");
             }
         }
 

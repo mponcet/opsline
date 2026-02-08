@@ -1,5 +1,5 @@
 use clap::Parser;
-use tracing_subscriber::{fmt, EnvFilter};
+use tracing_subscriber::{EnvFilter, fmt};
 
 use powerline::Powerline;
 use segments::{
@@ -39,7 +39,9 @@ struct Args {
 
 fn main() {
     fmt()
-        .with_env_filter(EnvFilter::try_from_env("OPSLINE_LOG").unwrap_or_else(|_| EnvFilter::new("none")))
+        .with_env_filter(
+            EnvFilter::try_from_env("OPSLINE_LOG").unwrap_or_else(|_| EnvFilter::new("none")),
+        )
         .init();
 
     let args = Args::parse();
