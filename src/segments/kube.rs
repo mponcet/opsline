@@ -16,6 +16,10 @@ impl<'a> KubeSegment<'a> {
 }
 
 impl SegmentGenerator for KubeSegment<'_> {
+    fn name(&self) -> &'static str {
+        "kube"
+    }
+
     fn output(&self, _shell: Shell, theme: &Theme) -> Option<Vec<Segment>> {
         let config = Kubeconfig::read().ok()?;
         let current_context = config.current_context?;

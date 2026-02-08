@@ -61,6 +61,10 @@ fn list_containers<T: AsRef<str>>(url: T, timeout: Option<Duration>) -> Option<V
 }
 
 impl SegmentGenerator for ContainersSegment<'_> {
+    fn name(&self) -> &'static str {
+        "containers"
+    }
+
     fn output(&self, _shell: Shell, theme: &Theme) -> Option<Vec<Segment>> {
         let url = &self.config.as_ref()?.url;
         let containers = list_containers(url, Some(Duration::from_millis(REQUEST_TIMEOUT_MS)))?;

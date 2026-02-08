@@ -11,6 +11,10 @@ impl ReadonlySegment {
 }
 
 impl SegmentGenerator for ReadonlySegment {
+    fn name(&self) -> &'static str {
+        "readonly"
+    }
+
     fn output(&self, _shell: Shell, theme: &Theme) -> Option<Vec<Segment>> {
         let readonly = unsafe { libc::access(c".".as_ptr(), libc::W_OK) } != 0;
 

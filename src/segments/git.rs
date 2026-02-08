@@ -12,6 +12,10 @@ impl GitSegment {
 }
 
 impl SegmentGenerator for GitSegment {
+    fn name(&self) -> &'static str {
+        "git"
+    }
+
     fn output(&self, _shell: Shell, theme: &Theme) -> Option<Vec<Segment>> {
         let repo = Repository::discover(".").ok()?;
         log::info!("repository found at {}", repo.path().to_string_lossy());

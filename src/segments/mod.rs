@@ -33,5 +33,6 @@ pub struct Segment {
 }
 
 pub trait SegmentGenerator {
+    fn name(&self) -> &'static str;
     fn output(&self, shell: Shell, theme: &Theme) -> Option<Vec<Segment>>;
 }

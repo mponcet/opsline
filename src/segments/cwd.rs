@@ -14,6 +14,10 @@ impl<'a> CwdSegment<'a> {
 }
 
 impl SegmentGenerator for CwdSegment<'_> {
+    fn name(&self) -> &'static str {
+        "cwd"
+    }
+
     fn output(&self, shell: Shell, theme: &Theme) -> Option<Vec<Segment>> {
         let text = if self.config.dironly {
             match shell {

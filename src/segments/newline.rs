@@ -11,6 +11,10 @@ impl NewLineSegment {
 }
 
 impl SegmentGenerator for NewLineSegment {
+    fn name(&self) -> &'static str {
+        "newline"
+    }
+
     fn output(&self, _shell: Shell, _theme: &Theme) -> Option<Vec<Segment>> {
         Some(Vec::from([Segment {
             name: "newline",

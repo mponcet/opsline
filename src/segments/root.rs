@@ -11,6 +11,10 @@ impl RootSegment {
 }
 
 impl SegmentGenerator for RootSegment {
+    fn name(&self) -> &'static str {
+        "root"
+    }
+
     fn output(&self, shell: Shell, theme: &Theme) -> Option<Vec<Segment>> {
         let text = match shell {
             Shell::Bash => r" \$ ",

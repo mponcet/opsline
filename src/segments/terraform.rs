@@ -14,6 +14,10 @@ impl<'a> TerraformSegment<'a> {
 }
 
 impl SegmentGenerator for TerraformSegment<'_> {
+    fn name(&self) -> &'static str {
+        "terraform"
+    }
+
     fn output(&self, _shell: Shell, theme: &Theme) -> Option<Vec<Segment>> {
         let workspace = std::fs::read_to_string(".terraform/environment").ok()?;
         let mut segments = Vec::new();
