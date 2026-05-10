@@ -3,8 +3,8 @@ use tracing_subscriber::{EnvFilter, fmt};
 
 use powerline::Powerline;
 use segments::{
-    ContainersSegment, CwdSegment, GitSegment, KubeSegment, NewLineSegment, ReadonlySegment,
-    RootSegment, SegmentGenerator, SshSegment, TerraformSegment,
+    ContainersSegment, CwdSegment, DevwrapSegment, GitSegment, KubeSegment, NewLineSegment,
+    ReadonlySegment, RootSegment, SegmentGenerator, SshSegment, TerraformSegment,
 };
 use shell::Shell;
 use theme::Theme;
@@ -113,6 +113,7 @@ fn main() {
                 powerline.add_segment(ContainersSegment::new(config.containers.as_ref()))
             }
             "terraform" => powerline.add_segment(TerraformSegment::new(config.terraform.as_ref())),
+            "devwrap" => powerline.add_segment(DevwrapSegment::new()),
             s => panic!("unknown segment name: {}", s),
         }
     }

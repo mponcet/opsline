@@ -5,6 +5,7 @@ use crate::theme::{BackgroundColor, ForegroundColor, Theme};
 
 pub mod containers;
 pub mod cwd;
+pub mod devwrap;
 pub mod git;
 pub mod kube;
 pub mod newline;
@@ -15,6 +16,7 @@ pub mod terraform;
 
 pub use containers::ContainersSegment;
 pub use cwd::CwdSegment;
+pub use devwrap::DevwrapSegment;
 pub use git::GitSegment;
 pub use kube::KubeSegment;
 pub use newline::NewLineSegment;

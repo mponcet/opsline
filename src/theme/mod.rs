@@ -157,6 +157,8 @@ pub struct Theme {
     pub ssh_fg: ForegroundColor,
     pub terraform_bg: BackgroundColor,
     pub terraform_fg: ForegroundColor,
+    pub devwrap_bg: BackgroundColor,
+    pub devwrap_fg: ForegroundColor,
 }
 
 mod default;
