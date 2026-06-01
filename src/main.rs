@@ -69,7 +69,7 @@ fn main() {
             let context_aliases = args.kube_context_aliases.map(|s| {
                 s.split(',')
                     .map(|pair| {
-                        if let Some((lhs, rhs)) = pair.split_once(':') {
+                        if let Some((lhs, rhs)) = pair.rsplit_once(':') {
                             configuration::KubeContextAlias {
                                 context: lhs.trim().to_string(),
                                 alias: rhs.trim().to_string(),
