@@ -35,6 +35,7 @@ impl BackgroundColor {
                 match self.1 {
                     Shell::Bash => write!(f, r"\[\e[48;5;{}m\]", self.0),
                     Shell::Zsh => write!(f, "%{{\x1b[48;5;{}m%}}", self.0),
+                    Shell::Fish => write!(f, "\x1b[48;5;{}m", self.0),
                 }
             }
         }
@@ -80,6 +81,7 @@ impl ForegroundColor {
                 match self.1 {
                     Shell::Bash => write!(f, r"\[\e[38;5;{}m\]", self.0),
                     Shell::Zsh => write!(f, "%{{\x1b[38;5;{}m%}}", self.0),
+                    Shell::Fish => write!(f, "\x1b[38;5;{}m", self.0),
                 }
             }
         }
@@ -99,6 +101,7 @@ impl Blink {
                 match self.1 {
                     Shell::Bash => write!(f, r"\[\e[5m\]"),
                     Shell::Zsh => write!(f, "%{{\x1b[5m%}}"),
+                    Shell::Fish => write!(f, "\x1b[5m"),
                 }
             }
         }
@@ -118,6 +121,7 @@ impl Reset {
                 match self.1 {
                     Shell::Bash => write!(f, r"\[\e[0m\]"),
                     Shell::Zsh => write!(f, "%{{\x1b[0m%}}"),
+                    Shell::Fish => write!(f, "\x1b[0m"),
                 }
             }
         }

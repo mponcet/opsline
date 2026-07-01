@@ -42,6 +42,18 @@ if [ "$TERM" != "linux" ] && command -v opsline 2>&1 >/dev/null; then
 fi
 ```
 
+### Fish
+
+Add the following to your `config.fish` :
+
+```fish
+function fish_prompt
+    if test "$TERM" != "linux"
+        echo (opsline --shell fish --theme gruvbox --segments cwd,git,root)
+    end
+end
+```
+
 ## Configuration
 
 Opsline now command-line arguments. Here are the available options:
@@ -51,7 +63,7 @@ Usage: opsline [OPTIONS] --shell <SHELL>
 
 Options:
       --shell <SHELL>
-          [possible values: bash, zsh]
+          [possible values: bash, zsh, fish]
       --theme <THEME>
           [default: default] [possible values: default, gruvbox]
       --segments <SEGMENTS>

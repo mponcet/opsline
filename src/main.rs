@@ -19,7 +19,7 @@ mod utils;
 #[derive(Parser, Debug)]
 #[command(author, version, about, long_about = None)]
 struct Args {
-    #[arg(long, value_parser = ["bash", "zsh"])]
+    #[arg(long, value_parser = ["bash", "zsh", "fish"])]
     shell: String,
     #[arg(long, value_parser = ["default", "gruvbox"], default_value = "default")]
     theme: String,
