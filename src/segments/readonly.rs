@@ -1,4 +1,4 @@
-use crate::segments::{Segment, SegmentGenerator};
+use crate::segments::{Segment, SegmentSection};
 use crate::shell::Shell;
 use crate::theme::Theme;
 
@@ -10,16 +10,16 @@ impl ReadonlySegment {
     }
 }
 
-impl SegmentGenerator for ReadonlySegment {
+impl Segment for ReadonlySegment {
     fn name(&self) -> &'static str {
         "readonly"
     }
 
-    fn output(&self, _shell: Shell, theme: &Theme) -> Option<Vec<Segment>> {
+    fn output(&self, _shell: Shell, theme: &Theme) -> Option<Vec<SegmentSection>> {
         let readonly = unsafe { libc::access(c".".as_ptr(), libc::W_OK) } != 0;
 
         if readonly {
-            Some(Vec::from([Segment {
+            Some(Vec::from([SegmentSection {
                 name: "readonly",
                 text: "  ".into(),
                 bg: theme.readonly_bg,

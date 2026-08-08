@@ -24,7 +24,7 @@ pub use root::RootSegment;
 pub use ssh::SshSegment;
 pub use terraform::TerraformSegment;
 
-pub struct Segment {
+pub struct SegmentSection {
     pub name: &'static str,
     pub text: Cow<'static, str>,
     #[allow(dead_code)]
@@ -33,7 +33,7 @@ pub struct Segment {
     pub blinking: bool,
 }
 
-pub trait SegmentGenerator {
+pub trait Segment {
     fn name(&self) -> &'static str;
-    fn output(&self, shell: Shell, theme: &Theme) -> Option<Vec<Segment>>;
+    fn output(&self, shell: Shell, theme: &Theme) -> Option<Vec<SegmentSection>>;
 }

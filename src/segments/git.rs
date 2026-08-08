@@ -1,5 +1,5 @@
 use crate::Shell;
-use crate::segments::{Segment, SegmentGenerator};
+use crate::segments::{Segment, SegmentSection};
 use crate::theme::Theme;
 use git2::{BranchType, Repository};
 use tracing::{error, info};
@@ -12,12 +12,12 @@ impl GitSegment {
     }
 }
 
-impl SegmentGenerator for GitSegment {
+impl Segment for GitSegment {
     fn name(&self) -> &'static str {
         "git"
     }
 
-    fn output(&self, _shell: Shell, theme: &Theme) -> Option<Vec<Segment>> {
+    fn output(&self, _shell: Shell, theme: &Theme) -> Option<Vec<SegmentSection>> {
         let repo = Repository::discover(".").ok()?;
         info!("repository found at {}", repo.path().to_string_lossy());
 
@@ -47,7 +47,7 @@ impl SegmentGenerator for GitSegment {
             }
         }
 
-        let mut segments = Vec::from([Segment {
+        let mut sections = Vec::from([SegmentSection {
             name: "git",
             text: format!("  {} ", branch_name?).into(),
             bg: theme.git_branch_bg,
@@ -59,7 +59,7 @@ impl SegmentGenerator for GitSegment {
             && let Ok((ahead, behind)) = repo.graph_ahead_behind(local, upstream)
         {
             if ahead > 0 {
-                segments.push(Segment {
+                sections.push(SegmentSection {
                     name: "git",
                     text: format!("{}⬆ ", ahead).into(),
                     bg: theme.git_ahead_bg,
@@ -68,7 +68,7 @@ impl SegmentGenerator for GitSegment {
                 });
             }
             if behind > 0 {
-                segments.push(Segment {
+                sections.push(SegmentSection {
                     name: "git",
                     text: format!("{}⬇ ", behind).into(),
                     bg: theme.git_behind_bg,
@@ -111,7 +111,7 @@ impl SegmentGenerator for GitSegment {
         }
 
         if staged > 0 {
-            segments.push(Segment {
+            sections.push(SegmentSection {
                 name: "git",
                 text: format!("{}✔ ", staged).into(),
                 bg: theme.git_staged_bg,
@@ -121,7 +121,7 @@ impl SegmentGenerator for GitSegment {
         }
 
         if modified > 0 {
-            segments.push(Segment {
+            sections.push(SegmentSection {
                 name: "git",
                 text: format!("{}✎ ", modified).into(),
                 bg: theme.git_modified_bg,
@@ -131,7 +131,7 @@ impl SegmentGenerator for GitSegment {
         }
 
         if untracked > 0 {
-            segments.push(Segment {
+            sections.push(SegmentSection {
                 name: "git",
                 text: format!("{}+ ", untracked).into(),
                 bg: theme.git_untracked_bg,
@@ -141,7 +141,7 @@ impl SegmentGenerator for GitSegment {
         }
 
         if conflicted > 0 {
-            segments.push(Segment {
+            sections.push(SegmentSection {
                 name: "git",
                 text: format!("{}✼ ", conflicted).into(),
                 bg: theme.git_conflicted_bg,
@@ -150,6 +150,6 @@ impl SegmentGenerator for GitSegment {
             });
         }
 
-        Some(segments)
+        Some(sections)
     }
 }

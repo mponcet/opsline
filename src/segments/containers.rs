@@ -4,7 +4,7 @@ use ureq::Agent;
 use ureq::config::Config;
 
 use crate::configuration::ContainersConfiguration;
-use crate::segments::{Segment, SegmentGenerator};
+use crate::segments::{Segment, SegmentSection};
 use crate::shell::Shell;
 use crate::theme::Theme;
 use crate::utils::ureq_unix::{FakeResolver, UnixConnector};
@@ -61,12 +61,12 @@ fn list_containers<T: AsRef<str>>(url: T, timeout: Option<Duration>) -> Option<V
         .ok()
 }
 
-impl SegmentGenerator for ContainersSegment<'_> {
+impl Segment for ContainersSegment<'_> {
     fn name(&self) -> &'static str {
         "containers"
     }
 
-    fn output(&self, _shell: Shell, theme: &Theme) -> Option<Vec<Segment>> {
+    fn output(&self, _shell: Shell, theme: &Theme) -> Option<Vec<SegmentSection>> {
         let url = &self.config.as_ref()?.url;
         let containers = list_containers(url, Some(Duration::from_millis(REQUEST_TIMEOUT_MS)))?;
 
@@ -103,7 +103,7 @@ impl SegmentGenerator for ContainersSegment<'_> {
             text.push(' ');
         }
 
-        Some(Vec::from([Segment {
+        Some(Vec::from([SegmentSection {
             name: "containers",
             text: text.into(),
             bg: theme.container_bg,

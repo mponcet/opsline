@@ -1,6 +1,6 @@
 use crate::Shell;
 use crate::configuration::CwdConfiguration;
-use crate::segments::{Segment, SegmentGenerator};
+use crate::segments::{Segment, SegmentSection};
 use crate::theme::Theme;
 
 pub struct CwdSegment<'a> {
@@ -13,12 +13,12 @@ impl<'a> CwdSegment<'a> {
     }
 }
 
-impl SegmentGenerator for CwdSegment<'_> {
+impl Segment for CwdSegment<'_> {
     fn name(&self) -> &'static str {
         "cwd"
     }
 
-    fn output(&self, shell: Shell, theme: &Theme) -> Option<Vec<Segment>> {
+    fn output(&self, shell: Shell, theme: &Theme) -> Option<Vec<SegmentSection>> {
         let text = if self.config.dironly {
             match shell {
                 Shell::Bash => r" \W ",
@@ -31,7 +31,7 @@ impl SegmentGenerator for CwdSegment<'_> {
             }
         };
 
-        Some(Vec::from([Segment {
+        Some(Vec::from([SegmentSection {
             name: "cwd",
             text: text.into(),
             bg: theme.cwd_bg,

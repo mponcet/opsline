@@ -2,7 +2,7 @@ use kube::config::Kubeconfig;
 
 use crate::Shell;
 use crate::configuration::KubeConfiguration;
-use crate::segments::{Segment, SegmentGenerator};
+use crate::segments::{Segment, SegmentSection};
 use crate::theme::{ForegroundColor, Theme};
 
 pub struct KubeSegment<'a> {
@@ -15,12 +15,12 @@ impl<'a> KubeSegment<'a> {
     }
 }
 
-impl SegmentGenerator for KubeSegment<'_> {
+impl Segment for KubeSegment<'_> {
     fn name(&self) -> &'static str {
         "kube"
     }
 
-    fn output(&self, _shell: Shell, theme: &Theme) -> Option<Vec<Segment>> {
+    fn output(&self, _shell: Shell, theme: &Theme) -> Option<Vec<SegmentSection>> {
         let config = Kubeconfig::read().ok()?;
         let current_context = config.current_context?;
         let context = config
@@ -28,9 +28,9 @@ impl SegmentGenerator for KubeSegment<'_> {
             .iter()
             .find(|c| c.name == current_context)
             .map(|c| c.context.as_ref())??;
-        let mut segments = Vec::new();
+        let mut sections = Vec::new();
 
-        segments.push(Segment {
+        sections.push(SegmentSection {
             name: "kube",
             text: " ⎈ ".into(),
             bg: theme.kube_context_bg,
@@ -44,7 +44,7 @@ impl SegmentGenerator for KubeSegment<'_> {
                 .iter()
                 .any(|c| current_context.contains(c))
         {
-            segments.push(Segment {
+            sections.push(SegmentSection {
                 name: "kube",
                 text: "".into(),
                 bg: theme.kube_context_bg,
@@ -60,7 +60,7 @@ impl SegmentGenerator for KubeSegment<'_> {
                 .iter()
                 .find(|ka| ka.context == current_context)
         });
-        segments.push(Segment {
+        sections.push(SegmentSection {
             name: "kube",
             text: format!(
                 "{} ",
@@ -75,7 +75,7 @@ impl SegmentGenerator for KubeSegment<'_> {
         });
 
         if let Some(ref namespace) = context.namespace {
-            segments.push(Segment {
+            sections.push(SegmentSection {
                 name: "kube",
                 text: format!("{} ", namespace).into(),
                 bg: theme.kube_namespace_bg,
@@ -84,6 +84,6 @@ impl SegmentGenerator for KubeSegment<'_> {
             })
         }
 
-        Some(segments)
+        Some(sections)
     }
 }

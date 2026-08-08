@@ -1,4 +1,4 @@
-use crate::segments::SegmentGenerator;
+use crate::segments::Segment;
 use crate::shell::Shell;
 use crate::theme::{Blink, Reset, Theme};
 use std::time::Instant;
@@ -7,7 +7,7 @@ use tracing::debug;
 pub struct Powerline<'a> {
     shell: Shell,
     theme: Theme,
-    segments: Vec<Box<dyn SegmentGenerator + 'a>>,
+    segments: Vec<Box<dyn Segment + 'a>>,
 }
 
 impl<'a> Powerline<'a> {
@@ -19,7 +19,7 @@ impl<'a> Powerline<'a> {
         }
     }
 
-    pub fn add_segment(&mut self, segment: impl SegmentGenerator + 'a) {
+    pub fn add_segment(&mut self, segment: impl Segment + 'a) {
         self.segments.push(Box::new(segment));
     }
 
@@ -29,12 +29,12 @@ impl<'a> Powerline<'a> {
             .iter()
             .filter_map(|s| {
                 let start = Instant::now();
-                let segments = s.output(self.shell, &self.theme);
+                let sections = s.output(self.shell, &self.theme);
                 let duration = start.elapsed();
 
                 debug!(segment = s.name(), duration = ?duration, "segment completed");
 
-                segments
+                sections
             })
             .flatten()
             .collect();

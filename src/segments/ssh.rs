@@ -1,4 +1,4 @@
-use crate::segments::{Segment, SegmentGenerator};
+use crate::segments::{Segment, SegmentSection};
 use crate::shell::Shell;
 use crate::theme::Theme;
 
@@ -10,14 +10,14 @@ impl SshSegment {
     }
 }
 
-impl SegmentGenerator for SshSegment {
+impl Segment for SshSegment {
     fn name(&self) -> &'static str {
         "ssh"
     }
 
-    fn output(&self, _shell: Shell, theme: &Theme) -> Option<Vec<super::Segment>> {
+    fn output(&self, _shell: Shell, theme: &Theme) -> Option<Vec<super::SegmentSection>> {
         if std::env::var("SSH_CLIENT").is_ok() {
-            Some(Vec::from([Segment {
+            Some(Vec::from([SegmentSection {
                 name: "ssh",
                 text: " 󰣀 ".into(),
                 bg: theme.ssh_bg,

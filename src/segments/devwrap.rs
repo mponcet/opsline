@@ -1,4 +1,4 @@
-use crate::segments::{Segment, SegmentGenerator};
+use crate::segments::{Segment, SegmentSection};
 use crate::shell::Shell;
 use crate::theme::Theme;
 
@@ -10,14 +10,14 @@ impl DevwrapSegment {
     }
 }
 
-impl SegmentGenerator for DevwrapSegment {
+impl Segment for DevwrapSegment {
     fn name(&self) -> &'static str {
         "devwrap"
     }
 
-    fn output(&self, _shell: Shell, theme: &Theme) -> Option<Vec<super::Segment>> {
+    fn output(&self, _shell: Shell, theme: &Theme) -> Option<Vec<super::SegmentSection>> {
         if std::env::var("DEVWRAP").is_ok() {
-            Some(Vec::from([Segment {
+            Some(Vec::from([SegmentSection {
                 name: "devwrap",
                 text: " 󰕥 ".into(),
                 bg: theme.devwrap_bg,

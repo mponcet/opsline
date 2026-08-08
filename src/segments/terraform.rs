@@ -1,5 +1,5 @@
 use crate::configuration::TerraformConfiguration;
-use crate::segments::{Segment, SegmentGenerator};
+use crate::segments::{Segment, SegmentSection};
 use crate::shell::Shell;
 use crate::theme::{ForegroundColor, Theme};
 
@@ -13,16 +13,16 @@ impl<'a> TerraformSegment<'a> {
     }
 }
 
-impl SegmentGenerator for TerraformSegment<'_> {
+impl Segment for TerraformSegment<'_> {
     fn name(&self) -> &'static str {
         "terraform"
     }
 
-    fn output(&self, _shell: Shell, theme: &Theme) -> Option<Vec<Segment>> {
+    fn output(&self, _shell: Shell, theme: &Theme) -> Option<Vec<SegmentSection>> {
         let workspace = std::fs::read_to_string(".terraform/environment").ok()?;
-        let mut segments = Vec::new();
+        let mut sections = Vec::new();
 
-        segments.push(Segment {
+        sections.push(SegmentSection {
             name: "terraform",
             text: " 󱁢 ".into(),
             bg: theme.terraform_bg,
@@ -33,7 +33,7 @@ impl SegmentGenerator for TerraformSegment<'_> {
         if let Some(config) = self.config
             && config.critical_workspaces.contains(&workspace)
         {
-            segments.push(Segment {
+            sections.push(SegmentSection {
                 name: "terraform",
                 text: "".into(),
                 bg: theme.terraform_bg,
@@ -42,7 +42,7 @@ impl SegmentGenerator for TerraformSegment<'_> {
             });
         }
 
-        segments.push(Segment {
+        sections.push(SegmentSection {
             name: "terraform",
             text: format!("{workspace} ").into(),
             bg: theme.terraform_bg,
@@ -50,6 +50,6 @@ impl SegmentGenerator for TerraformSegment<'_> {
             blinking: false,
         });
 
-        Some(segments)
+        Some(sections)
     }
 }

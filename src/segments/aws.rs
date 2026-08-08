@@ -1,4 +1,4 @@
-use crate::segments::{Segment, SegmentGenerator};
+use crate::segments::{Segment, SegmentSection};
 use crate::shell::Shell;
 use crate::theme::Theme;
 
@@ -10,15 +10,15 @@ impl AwsSegment {
     }
 }
 
-impl SegmentGenerator for AwsSegment {
+impl Segment for AwsSegment {
     fn name(&self) -> &'static str {
         "aws"
     }
 
-    fn output(&self, _shell: Shell, theme: &Theme) -> Option<Vec<Segment>> {
+    fn output(&self, _shell: Shell, theme: &Theme) -> Option<Vec<SegmentSection>> {
         let aws_profile = std::env::var("AWS_PROFILE").ok()?;
 
-        let segments = Vec::from([Segment {
+        let sections = Vec::from([SegmentSection {
             name: "aws",
             text: format!("  {} ", aws_profile).into(),
             bg: theme.aws_bg,
@@ -26,6 +26,6 @@ impl SegmentGenerator for AwsSegment {
             blinking: false,
         }]);
 
-        Some(segments)
+        Some(sections)
     }
 }
