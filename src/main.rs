@@ -9,6 +9,8 @@ use segments::{
 use shell::Shell;
 use theme::Theme;
 
+use crate::segments::aws::AwsSegment;
+
 mod configuration;
 mod powerline;
 mod segments;
@@ -102,6 +104,7 @@ fn main() {
 
     for segment in config.segments {
         match segment.as_str() {
+            "aws" => powerline.add_segment(AwsSegment::new()),
             "cwd" => powerline.add_segment(CwdSegment::new(&config.cwd)),
             "root" => powerline.add_segment(RootSegment::new()),
             "kube" => powerline.add_segment(KubeSegment::new(config.kube.as_ref())),

@@ -3,6 +3,7 @@ use std::borrow::Cow;
 use crate::Shell;
 use crate::theme::{BackgroundColor, ForegroundColor, Theme};
 
+pub mod aws;
 pub mod containers;
 pub mod cwd;
 pub mod devwrap;

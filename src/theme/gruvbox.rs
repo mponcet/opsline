@@ -1,6 +1,8 @@
 use super::{BackgroundColor, ForegroundColor, Theme};
 
 pub const GRUVBOX: Theme = Theme {
+    aws_bg: BackgroundColor::colorless(),
+    aws_fg: ForegroundColor::from_color_code(214),
     cwd_bg: BackgroundColor::colorless(),
     cwd_fg: ForegroundColor::from_color_code(223),
     container_bg: BackgroundColor::colorless(),

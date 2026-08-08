@@ -127,6 +127,8 @@ impl Reset {
 }
 
 pub struct Theme {
+    pub aws_bg: BackgroundColor,
+    pub aws_fg: ForegroundColor,
     pub container_bg: BackgroundColor,
     pub container_fg: ForegroundColor,
     pub cwd_bg: BackgroundColor,
