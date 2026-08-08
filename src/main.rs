@@ -3,8 +3,8 @@ use tracing_subscriber::{EnvFilter, fmt};
 
 use powerline::Powerline;
 use segments::{
-    ContainersSegment, CwdSegment, DevwrapSegment, GitSegment, KubeSegment, NewLineSegment,
-    ReadonlySegment, RootSegment, SegmentGenerator, SshSegment, TerraformSegment,
+    ContainersSegment, CwdSegment, DevwrapSegment, GitSegment, KubeSegment, ReadonlySegment,
+    RootSegment, SegmentGenerator, SshSegment, TerraformSegment,
 };
 use shell::Shell;
 use theme::Theme;
@@ -112,7 +112,6 @@ fn main() {
             "devwrap" => powerline.add_segment(DevwrapSegment::new()),
             "git" => powerline.add_segment(GitSegment::new()),
             "kube" => powerline.add_segment(KubeSegment::new(config.kube.as_ref())),
-            "newline" => powerline.add_segment(NewLineSegment::new()),
             "readonly" => powerline.add_segment(ReadonlySegment::new()),
             "root" => powerline.add_segment(RootSegment::new()),
             "ssh" => powerline.add_segment(SshSegment::new()),

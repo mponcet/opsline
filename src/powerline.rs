@@ -46,13 +46,8 @@ impl<'a> Powerline<'a> {
 
             print!(r"{}{}", segment.fg.fmt(self.shell), segment.text);
 
-            if segment.name == "newline" {
-                print!("{}", Reset.fmt(self.shell));
-                continue;
-            }
-
             match segments.get(i + 1) {
-                Some(next_segment) if next_segment.name != "newline" => {
+                Some(next_segment) => {
                     if next_segment.name != segment.name {
                         print!(
                             r"{}{}",

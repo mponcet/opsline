@@ -51,6 +51,7 @@ impl ForegroundColor {
         Self(Some(color_code))
     }
 
+    #[allow(dead_code)]
     pub const fn colorless() -> Self {
         Self(None)
     }
