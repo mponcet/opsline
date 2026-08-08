@@ -105,18 +105,18 @@ fn main() {
     for segment in config.segments {
         match segment.as_str() {
             "aws" => powerline.add_segment(AwsSegment::new()),
-            "cwd" => powerline.add_segment(CwdSegment::new(&config.cwd)),
-            "root" => powerline.add_segment(RootSegment::new()),
-            "kube" => powerline.add_segment(KubeSegment::new(config.kube.as_ref())),
-            "git" => powerline.add_segment(GitSegment::new()),
-            "newline" => powerline.add_segment(NewLineSegment::new()),
-            "ssh" => powerline.add_segment(SshSegment::new()),
-            "readonly" => powerline.add_segment(ReadonlySegment::new()),
             "containers" => {
                 powerline.add_segment(ContainersSegment::new(config.containers.as_ref()))
             }
-            "terraform" => powerline.add_segment(TerraformSegment::new(config.terraform.as_ref())),
+            "cwd" => powerline.add_segment(CwdSegment::new(&config.cwd)),
             "devwrap" => powerline.add_segment(DevwrapSegment::new()),
+            "git" => powerline.add_segment(GitSegment::new()),
+            "kube" => powerline.add_segment(KubeSegment::new(config.kube.as_ref())),
+            "newline" => powerline.add_segment(NewLineSegment::new()),
+            "readonly" => powerline.add_segment(ReadonlySegment::new()),
+            "root" => powerline.add_segment(RootSegment::new()),
+            "ssh" => powerline.add_segment(SshSegment::new()),
+            "terraform" => powerline.add_segment(TerraformSegment::new(config.terraform.as_ref())),
             s => panic!("unknown segment name: {}", s),
         }
     }
