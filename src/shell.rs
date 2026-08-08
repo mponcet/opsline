@@ -2,6 +2,7 @@
 pub enum Shell {
     Bash,
     Zsh,
+    Fish,
 }
 
 impl TryFrom<&str> for Shell {
@@ -11,6 +12,7 @@ impl TryFrom<&str> for Shell {
         match value {
             "bash" => Ok(Shell::Bash),
             "zsh" => Ok(Shell::Zsh),
+            "fish" => Ok(Shell::Fish),
             _ => Err("unknown shell".into()),
         }
     }

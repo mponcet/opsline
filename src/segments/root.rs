@@ -19,6 +19,10 @@ impl SegmentGenerator for RootSegment {
         let text = match shell {
             Shell::Bash => r" \$ ",
             Shell::Zsh => " %# ",
+            Shell::Fish => {
+                let is_root = unsafe { libc::geteuid() } == 0;
+                if is_root { " # " } else { " $ " }
+            }
         };
 
         Some(Vec::from([Segment {
