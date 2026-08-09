@@ -18,7 +18,7 @@ impl Segment for DevwrapSegment {
     fn output(&self, _shell: Shell, theme: &Theme) -> Option<Vec<super::SegmentSection>> {
         if std::env::var("DEVWRAP").is_ok() {
             Some(Vec::from([SegmentSection::Section {
-                text: " 󰕥 ".into(),
+                text: "󰕥".into(),
                 bg: theme.devwrap_bg,
                 fg: theme.devwrap_fg,
                 blinking: false,

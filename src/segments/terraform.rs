@@ -23,7 +23,7 @@ impl Segment for TerraformSegment<'_> {
         let mut sections = Vec::new();
 
         sections.push(SegmentSection::Section {
-            text: " 󱁢 ".into(),
+            text: "󱁢".into(),
             bg: theme.terraform_bg,
             fg: theme.terraform_fg,
             blinking: false,
@@ -41,7 +41,7 @@ impl Segment for TerraformSegment<'_> {
         }
 
         sections.push(SegmentSection::Section {
-            text: format!("{workspace} ").into(),
+            text: workspace.to_string().into(),
             bg: theme.terraform_bg,
             fg: theme.terraform_fg,
             blinking: false,

@@ -19,7 +19,7 @@ impl Segment for AwsSegment {
         let aws_profile = std::env::var("AWS_PROFILE").ok()?;
 
         let sections = Vec::from([SegmentSection::Section {
-            text: format!("  {} ", aws_profile).into(),
+            text: format!(" {}", aws_profile).into(),
             bg: theme.aws_bg,
             fg: theme.aws_fg,
             blinking: false,

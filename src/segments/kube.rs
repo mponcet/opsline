@@ -31,7 +31,7 @@ impl Segment for KubeSegment<'_> {
         let mut sections = Vec::new();
 
         sections.push(SegmentSection::Section {
-            text: " ⎈ ".into(),
+            text: "⎈".into(),
             bg: theme.kube_context_bg,
             fg: theme.kube_context_fg,
             blinking: false,
@@ -59,13 +59,11 @@ impl Segment for KubeSegment<'_> {
                 .find(|ka| ka.context == current_context)
         });
         sections.push(SegmentSection::Section {
-            text: format!(
-                "{} ",
-                alias
-                    .map(|a| a.alias.as_str())
-                    .unwrap_or(current_context.as_str())
-            )
-            .into(),
+            text: alias
+                .map(|a| a.alias.as_str())
+                .unwrap_or(current_context.as_str())
+                .to_string()
+                .into(),
             bg: theme.kube_context_bg,
             fg: theme.kube_context_fg,
             blinking: false,
@@ -73,7 +71,7 @@ impl Segment for KubeSegment<'_> {
 
         if let Some(ref namespace) = context.namespace {
             sections.push(SegmentSection::Section {
-                text: format!("{} ", namespace).into(),
+                text: namespace.to_string().into(),
                 bg: theme.kube_namespace_bg,
                 fg: theme.kube_namespace_fg,
                 blinking: false,

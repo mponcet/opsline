@@ -20,7 +20,7 @@ impl Segment for ReadonlySegment {
 
         if readonly {
             Some(Vec::from([SegmentSection::Section {
-                text: "  ".into(),
+                text: "".into(),
                 bg: theme.readonly_bg,
                 fg: theme.readonly_fg,
                 blinking: false,

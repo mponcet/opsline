@@ -53,7 +53,7 @@ impl<'a> Powerline<'a> {
                         print!("{}", Blink.fmt(self.shell));
                     }
                     print!(
-                        r"{}{}{}{}",
+                        r"{}{} {}{}",
                         bg.fmt(self.shell),
                         fg.fmt(self.shell),
                         text,
@@ -62,9 +62,9 @@ impl<'a> Powerline<'a> {
                 }
                 SegmentSection::Seperator => {
                     if i == sections.len() - 1 {
-                        print!(r"{}", Reset.fmt(self.shell),);
+                        print!(r" {}", Reset.fmt(self.shell),);
                     } else {
-                        print!(r"{}", Reset.fmt(self.shell),);
+                        print!(r" {}", Reset.fmt(self.shell),);
                     }
                 }
             }

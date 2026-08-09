@@ -48,7 +48,7 @@ impl Segment for GitSegment {
         }
 
         let mut sections = Vec::from([SegmentSection::Section {
-            text: format!("  {} ", branch_name?).into(),
+            text: format!(" {}", branch_name?).into(),
             bg: theme.git_branch_bg,
             fg: theme.git_branch_fg,
             blinking: false,
@@ -59,7 +59,7 @@ impl Segment for GitSegment {
         {
             if ahead > 0 {
                 sections.push(SegmentSection::Section {
-                    text: format!("{}⬆ ", ahead).into(),
+                    text: format!("{}⬆", ahead).into(),
                     bg: theme.git_ahead_bg,
                     fg: theme.git_ahead_fg,
                     blinking: false,
@@ -67,7 +67,7 @@ impl Segment for GitSegment {
             }
             if behind > 0 {
                 sections.push(SegmentSection::Section {
-                    text: format!("{}⬇ ", behind).into(),
+                    text: format!("{}⬇", behind).into(),
                     bg: theme.git_behind_bg,
                     fg: theme.git_behind_fg,
                     blinking: false,
@@ -109,7 +109,7 @@ impl Segment for GitSegment {
 
         if staged > 0 {
             sections.push(SegmentSection::Section {
-                text: format!("{}✔ ", staged).into(),
+                text: format!("{}✔", staged).into(),
                 bg: theme.git_staged_bg,
                 fg: theme.git_staged_fg,
                 blinking: false,
@@ -118,7 +118,7 @@ impl Segment for GitSegment {
 
         if modified > 0 {
             sections.push(SegmentSection::Section {
-                text: format!("{}✎ ", modified).into(),
+                text: format!("{}✎", modified).into(),
                 bg: theme.git_modified_bg,
                 fg: theme.git_modified_fg,
                 blinking: false,
@@ -127,7 +127,7 @@ impl Segment for GitSegment {
 
         if untracked > 0 {
             sections.push(SegmentSection::Section {
-                text: format!("{}+ ", untracked).into(),
+                text: format!("{}+", untracked).into(),
                 bg: theme.git_untracked_bg,
                 fg: theme.git_untracked_fg,
                 blinking: false,
@@ -136,7 +136,7 @@ impl Segment for GitSegment {
 
         if conflicted > 0 {
             sections.push(SegmentSection::Section {
-                text: format!("{}✼ ", conflicted).into(),
+                text: format!("{}✼", conflicted).into(),
                 bg: theme.git_conflicted_bg,
                 fg: theme.git_conflicted_fg,
                 blinking: false,

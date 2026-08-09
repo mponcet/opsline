@@ -21,13 +21,13 @@ impl Segment for CwdSegment<'_> {
     fn output(&self, shell: Shell, theme: &Theme) -> Option<Vec<SegmentSection>> {
         let text = if self.config.dironly {
             match shell {
-                Shell::Bash => r" \W ",
-                Shell::Zsh => " %1d ",
+                Shell::Bash => r"\W",
+                Shell::Zsh => "%1d",
             }
         } else {
             match shell {
-                Shell::Bash => r" \w ",
-                Shell::Zsh => " %d ",
+                Shell::Bash => r"\w",
+                Shell::Zsh => "%d",
             }
         };
 

@@ -17,8 +17,8 @@ impl Segment for RootSegment {
 
     fn output(&self, shell: Shell, theme: &Theme) -> Option<Vec<SegmentSection>> {
         let text = match shell {
-            Shell::Bash => r" \$ ",
-            Shell::Zsh => " %# ",
+            Shell::Bash => r"\$",
+            Shell::Zsh => "%#",
         };
 
         Some(Vec::from([SegmentSection::Section {
