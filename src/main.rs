@@ -4,7 +4,7 @@ use tracing_subscriber::{EnvFilter, fmt};
 use powerline::Powerline;
 use segments::{
     ContainersSegment, CwdSegment, DevwrapSegment, GitSegment, KubeSegment, ReadonlySegment,
-    RootSegment, Segment, SshSegment, TerraformSegment,
+    RootSegment, SshSegment, TerraformSegment,
 };
 use shell::Shell;
 use theme::Theme;

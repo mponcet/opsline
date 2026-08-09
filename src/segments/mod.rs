@@ -24,13 +24,14 @@ pub use root::RootSegment;
 pub use ssh::SshSegment;
 pub use terraform::TerraformSegment;
 
-pub struct SegmentSection {
-    pub name: &'static str,
-    pub text: Cow<'static, str>,
-    #[allow(dead_code)]
-    pub bg: BackgroundColor,
-    pub fg: ForegroundColor,
-    pub blinking: bool,
+pub enum SegmentSection {
+    Section {
+        text: Cow<'static, str>,
+        bg: BackgroundColor,
+        fg: ForegroundColor,
+        blinking: bool,
+    },
+    Seperator,
 }
 
 pub trait Segment {

@@ -31,8 +31,7 @@ impl Segment for CwdSegment<'_> {
             }
         };
 
-        Some(Vec::from([SegmentSection {
-            name: "cwd",
+        Some(Vec::from([SegmentSection::Section {
             text: text.into(),
             bg: theme.cwd_bg,
             fg: theme.cwd_fg,

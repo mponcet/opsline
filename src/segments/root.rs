@@ -1,6 +1,6 @@
 use crate::Shell;
 use crate::Theme;
-use crate::{Segment, segments::SegmentSection};
+use crate::segments::{Segment, SegmentSection};
 
 pub struct RootSegment;
 
@@ -21,8 +21,7 @@ impl Segment for RootSegment {
             Shell::Zsh => " %# ",
         };
 
-        Some(Vec::from([SegmentSection {
-            name: "root",
+        Some(Vec::from([SegmentSection::Section {
             text: text.into(),
             bg: theme.root_bg,
             fg: theme.root_fg,

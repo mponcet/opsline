@@ -103,8 +103,7 @@ impl Segment for ContainersSegment<'_> {
             text.push(' ');
         }
 
-        Some(Vec::from([SegmentSection {
-            name: "containers",
+        Some(Vec::from([SegmentSection::Section {
             text: text.into(),
             bg: theme.container_bg,
             fg: theme.container_fg,

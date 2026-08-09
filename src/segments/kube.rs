@@ -30,8 +30,7 @@ impl Segment for KubeSegment<'_> {
             .map(|c| c.context.as_ref())??;
         let mut sections = Vec::new();
 
-        sections.push(SegmentSection {
-            name: "kube",
+        sections.push(SegmentSection::Section {
             text: " ⎈ ".into(),
             bg: theme.kube_context_bg,
             fg: theme.kube_context_fg,
@@ -44,8 +43,7 @@ impl Segment for KubeSegment<'_> {
                 .iter()
                 .any(|c| current_context.contains(c))
         {
-            sections.push(SegmentSection {
-                name: "kube",
+            sections.push(SegmentSection::Section {
                 text: "".into(),
                 bg: theme.kube_context_bg,
                 fg: ForegroundColor::from_color_code(196),
@@ -60,8 +58,7 @@ impl Segment for KubeSegment<'_> {
                 .iter()
                 .find(|ka| ka.context == current_context)
         });
-        sections.push(SegmentSection {
-            name: "kube",
+        sections.push(SegmentSection::Section {
             text: format!(
                 "{} ",
                 alias
@@ -75,8 +72,7 @@ impl Segment for KubeSegment<'_> {
         });
 
         if let Some(ref namespace) = context.namespace {
-            sections.push(SegmentSection {
-                name: "kube",
+            sections.push(SegmentSection::Section {
                 text: format!("{} ", namespace).into(),
                 bg: theme.kube_namespace_bg,
                 fg: theme.kube_namespace_fg,

@@ -19,8 +19,7 @@ impl Segment for ReadonlySegment {
         let readonly = unsafe { libc::access(c".".as_ptr(), libc::W_OK) } != 0;
 
         if readonly {
-            Some(Vec::from([SegmentSection {
-                name: "readonly",
+            Some(Vec::from([SegmentSection::Section {
                 text: "  ".into(),
                 bg: theme.readonly_bg,
                 fg: theme.readonly_fg,

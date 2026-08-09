@@ -1,4 +1,4 @@
-use crate::segments::Segment;
+use crate::segments::{Segment, SegmentSection};
 use crate::shell::Shell;
 use crate::theme::{Blink, Reset, Theme};
 use std::time::Instant;
@@ -24,47 +24,50 @@ impl<'a> Powerline<'a> {
     }
 
     pub fn prompt(&self) {
-        let segments: Vec<_> = self
+        let sections: Vec<_> = self
             .segments
             .iter()
             .filter_map(|s| {
                 let start = Instant::now();
-                let sections = s.output(self.shell, &self.theme);
+                let mut sections = s.output(self.shell, &self.theme);
                 let duration = start.elapsed();
-
                 debug!(segment = s.name(), duration = ?duration, "segment completed");
 
+                if let Some(ref mut sections) = sections {
+                    sections.push(SegmentSection::Seperator);
+                }
                 sections
             })
             .flatten()
             .collect();
 
-        for (i, segment) in segments.iter().enumerate() {
-            if segment.blinking {
-                print!("{}", Blink.fmt(self.shell));
-            }
-
-            print!(r"{}{}", segment.fg.fmt(self.shell), segment.text);
-
-            match segments.get(i + 1) {
-                Some(next_segment) => {
-                    if next_segment.name != segment.name {
-                        print!(
-                            r"{}{}",
-                            Reset.fmt(self.shell),
-                            next_segment.fg.fmt(self.shell)
-                        );
+        for (i, section) in sections.iter().enumerate() {
+            match section {
+                SegmentSection::Section {
+                    text,
+                    bg,
+                    fg,
+                    blinking,
+                } => {
+                    if *blinking {
+                        print!("{}", Blink.fmt(self.shell));
+                    }
+                    print!(
+                        r"{}{}{}{}",
+                        bg.fmt(self.shell),
+                        fg.fmt(self.shell),
+                        text,
+                        Reset.fmt(self.shell)
+                    );
+                }
+                SegmentSection::Seperator => {
+                    if i == sections.len() - 1 {
+                        print!(r"{}", Reset.fmt(self.shell),);
                     } else {
-                        print!(
-                            r"{}{}",
-                            Reset.fmt(self.shell),
-                            next_segment.fg.fmt(self.shell)
-                        );
+                        print!(r"{}", Reset.fmt(self.shell),);
                     }
                 }
-                // last segment on the line
-                _ => print!(r"{}{}", Reset.fmt(self.shell), Reset.fmt(self.shell)),
-            };
+            }
         }
     }
 }
